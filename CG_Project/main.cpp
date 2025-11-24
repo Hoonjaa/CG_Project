@@ -224,7 +224,11 @@ GLvoid TimerFunction(int value)
 }
 
 GLvoid setViewPerspectiveMatrix() {
-	glm::mat4 view = glm::lookAt(glm::vec3(-2.0f, 2.0f, 5.0f),
+	glm::vec3 eye = glm::vec3(-2.0f, 2.0f, 5.0f);
+	unsigned int viewPosLocation = glGetUniformLocation(shaderProgramID, "viewPos");
+	glUniform3f(viewPosLocation, eye.x, eye.y, eye.z);
+
+	glm::mat4 view = glm::lookAt(eye,
 		glm::vec3(0.0f, 0.0f, 0.0f),
 		glm::vec3(0.0f, 1.0f, 0.0f));
 	glm::mat4 projection = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 100.0f);
