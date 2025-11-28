@@ -15,19 +15,32 @@ GLvoid Motion(int x, int y);
 GLvoid Win_to_GL_mouse(int x, int y, GLfloat& gl_x, GLfloat& gl_y);
 // 타이머 함수
 GLvoid TimerFunction(int value);
+
+// --------------여기부터 필요한 함수들 선언하는 구역-------------
 // 뷰 및 투영 변환 행렬
 GLvoid setViewPerspectiveMatrix();
 // 변환 행렬 업데이트
 GLvoid updateTransformMatrix();
+
+
+
 
 //--- 필요한 변수 선언
 GLuint shaderProgramID;													//--- 세이더 프로그램 이름
 GLuint vertexShader;													//--- 버텍스 세이더 객체
 GLuint fragmentShader;													//--- 프래그먼트 세이더 객체
 
+// --------------여기부터 필요한 변수들 선언하는 구역-------------
+
 GLint WindowWidth = 800, WindowHeight = 800;
-bool Timer = false;
+bool Timer = true; // 타이머 사용중
 glm::mat4 Transform_matrix{ 1.0f };
+
+//Cube* cube = nullptr; 예시임 포인터로 객체 선언
+// 포인터로 하는 이유는 셰이더가 만들어지는 등 기본 세팅 코드가 먼저 작동해야 객체 생성가능
+// 따라서 main 함수 안에서 new로 객체 생성
+
+
 
 char* filetobuf(const char* file)
 {
@@ -66,6 +79,12 @@ void main(int argc, char** argv)										//--- 윈도우 출력하고 콜백함수 설정
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glFrontFace(GL_CCW);
+
+	// --------------기본 객체 생성 시 여기서 작업-------------
+	// cube = new Cube(); 이런식
+
+
+
 	setViewPerspectiveMatrix();
 	glutDisplayFunc(drawScene);											//--- 출력 콜백 함수
 	glutReshapeFunc(Reshape);
@@ -149,6 +168,30 @@ GLvoid drawScene()														//--- 콜백 함수: 그리기 콜백 함수
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glUseProgram(shaderProgramID);
 	glPointSize(5.0);
+
+	// 이 model 같은 경우엔 프래그먼트 셰이더에서 조명 계산할 때 필요함
+	// 뷰, 투영 제외한 월드 좌표계만 변환 행렬한거임
+	// 일단은 단위 행렬로 설정해야 해서 이렇게 둘거임
+	// 추후에 객체의 draw함수에서 별도로 설정해줄 것
+	// 설정이 끝나면 아래 3줄 코드는 삭제해도 무방함.
+	glm::mat4 model = glm::mat4(1.0f);
+	unsigned int modelLocation = glGetUniformLocation(shaderProgramID, "model");
+	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model));
+
+
+	// 조명 관련 uniform 변수들 설정
+	unsigned int lightPosLocation = glGetUniformLocation(shaderProgramID, "lightPos"); //--- lightPos 값 전달: (0.0, 0.0, 5.0);
+	glUniform3f(lightPosLocation, 0.0f, 0.0f, 5.0f);
+	unsigned int lightColorLocation = glGetUniformLocation(shaderProgramID, "lightColor"); //--- lightColor 값 전달: (1.0, 1.0, 1.0) 백색
+	glUniform3f(lightColorLocation, 1.0f, 1.0f, 1.0f);
+
+	// ----------------여기서 객체 그리기--------------------
+	// cube->draw(shaderProgramID, Transform_matrix); 이런식
+	// cube 내부에서 유니폼 변수를 바꿔주기 위해 shaderProgramID 전달
+	// cube 내부에서 최종 변환 행렬을 설정해야하기 때문에 Transform_matrix 전달
+	// 현재 Transform_matrix는 뷰 및 투영 변환 행렬임
+
+	// 결과적으론 cube->draw(shaderProgramID, Transform_matrix); 함수 하나 만으로 애니메이션까지 다 처리 가능하게
 
 
 

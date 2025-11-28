@@ -60,6 +60,9 @@ private:
         // 아랫면 (normal: 0, -1, 0)
         20,21,22, 20,22,23
 	};
+public:
+    // 여기서 회전에 관한 변수들이나 함수들 선언 가능
+	// 그리고 그 변수를 활용해서 draw 함수에서 modelMatrix 갱신 가능
 
 public:
 	Cube();

@@ -15,7 +15,7 @@ Cube::Cube()
 	// EBO: 인덱스 데이터
 	allocateIndex(sizeof(indexes), GL_STATIC_DRAW);
 	uploadIndex(indexes, sizeof(indexes));
-	vertexCount = 36;
+	vertexCount = 36; // 굳이 없어도 되긴함 아래 draw할 때 vertexCount를 그냥 36으로 넣어도 됨
 	setDrawMode(GL_TRIANGLES);
 }
 
@@ -25,11 +25,25 @@ Cube::~Cube()
 
 GLvoid Cube::draw(const GLuint& ShaderID, const glm::mat4& main_matirx)
 {
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // 와이어프레임 모드
 	glBindVertexArray(VAO);
+
+	// modelTransform 행렬을 여기에서 변환
+
+
+
+	// main.cpp의 주석에서도 말했듯이 조명작업을 위해(노말 위치 필요해서임), 프래그먼트 셰이더에선 뷰,투영을 행하지 않은 모델 행렬이 필요함.
+	// Object.h를 보면 기본적으로 modelMatrix는 단위행렬로 초기화 되어있음.
+	// modelMatrix에 객체에 필요한 변환을 다 해주고 프래그먼트 셰이더로 보내주면 됨.
+	unsigned int modelLocation = glGetUniformLocation(ShaderID, "model");
+	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(modelMatrix));
+
+	// 그리고 뷰,투영 행렬과 합쳐진 final_matrix는 버텍스 셰이더로 보내주면 되는거임.
 	glm::mat4 final_matrix = main_matirx * modelMatrix;
 	unsigned int modelLocation = glGetUniformLocation(ShaderID, "Transform");
 	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(final_matrix));
+
+	// 그리고 나서 최종적으로 그려주는 코드.
 	glDrawElements(DrawMode, vertexCount, GL_UNSIGNED_INT, 0);
 }
 
