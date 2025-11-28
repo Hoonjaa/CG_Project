@@ -68,7 +68,7 @@ public:
 	Cube();
 	~Cube();
 
-	GLvoid draw(const GLuint& ShaderID, const glm::mat4& main_matirx) override;
+	GLvoid draw(const GLuint& ShaderID, const glm::mat4& worldMatrix, const glm::mat4& viewProjMatrix) override;
 	GLvoid update() override;
 };
 

@@ -43,6 +43,6 @@ public:
 	GLint getDrawMode() const { return DrawMode; }
 	glm::vec3 getPosition() const { return vPos; }
 
-	virtual GLvoid draw(const GLuint& ShaderID, const glm::mat4& main_matirx) = 0;
+	virtual GLvoid draw(const GLuint& ShaderID, const glm::mat4& worldMatrix, const glm::mat4& viewProjMatrix) = 0;
 	virtual GLvoid update() = 0;
 };

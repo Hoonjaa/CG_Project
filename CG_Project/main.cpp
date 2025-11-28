@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "Cube.h"
 
 //--- 아래 5개 함수는 사용자 정의 함수임
 void make_vertexShaders();
@@ -39,6 +40,7 @@ glm::mat4 Transform_matrix{ 1.0f };
 //Cube* cube = nullptr; 예시임 포인터로 객체 선언
 // 포인터로 하는 이유는 셰이더가 만들어지는 등 기본 세팅 코드가 먼저 작동해야 객체 생성가능
 // 따라서 main 함수 안에서 new로 객체 생성
+Cube* cube = nullptr;
 
 
 
@@ -82,7 +84,7 @@ void main(int argc, char** argv)										//--- 윈도우 출력하고 콜백함수 설정
 
 	// --------------기본 객체 생성 시 여기서 작업-------------
 	// cube = new Cube(); 이런식
-
+	cube = new Cube();
 
 
 	setViewPerspectiveMatrix();
@@ -192,7 +194,7 @@ GLvoid drawScene()														//--- 콜백 함수: 그리기 콜백 함수
 	// 현재 Transform_matrix는 뷰 및 투영 변환 행렬임
 
 	// 결과적으론 cube->draw(shaderProgramID, Transform_matrix); 함수 하나 만으로 애니메이션까지 다 처리 가능하게
-
+	cube->draw(shaderProgramID, glm::mat4(1.0f), Transform_matrix);
 
 
 	glutSwapBuffers();													// 화면에 출력하기
