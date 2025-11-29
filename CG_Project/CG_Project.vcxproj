@@ -128,6 +128,7 @@
     <ClCompile Include="Gun_body.cpp" />
     <ClCompile Include="Gun_cover.cpp" />
     <ClCompile Include="Gun_handle.cpp" />
+    <ClCompile Include="Gun_magazine.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Cube.cpp" />
     <ClCompile Include="Object.cpp" />
@@ -141,6 +142,7 @@
     <ClInclude Include="Gun_body.h" />
     <ClInclude Include="Gun_cover.h" />
     <ClInclude Include="Gun_handle.h" />
+    <ClInclude Include="Gun_magazine.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Object_part.h" />

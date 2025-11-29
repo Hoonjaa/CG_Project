@@ -8,10 +8,10 @@ private:
     GLvoid setVertexInfo() {
         GLfloat temp[9 * 24] = {
             // 앞면 (z = +0.5, normal = 0, 0, 1)
-            vPos.x + 0.05f, vPos.y + 0.15f, vPos.z + 0.1f,  vColor.r, vColor.g, vColor.b,  0.0f, 0.0f, 1.0f,
-            vPos.x - 0.05f, vPos.y + 0.15f, vPos.z + 0.1f,  vColor.r, vColor.g, vColor.b,  0.0f, 0.0f, 1.0f,
-            vPos.x - 0.05f, vPos.y - 0.15f, vPos.z + 0.05f,  vColor.r, vColor.g, vColor.b,  0.0f, 0.0f, 1.0f,
-            vPos.x + 0.05f, vPos.y - 0.15f, vPos.z + 0.05f,  vColor.r, vColor.g, vColor.b,  0.0f, 0.0f, 1.0f,
+            vPos.x + 0.05f, vPos.y + 0.15f, vPos.z + 0.1f,  vColor.r, vColor.g, vColor.b,  0.0f, -0.164f, 0.986f,
+            vPos.x - 0.05f, vPos.y + 0.15f, vPos.z + 0.1f,  vColor.r, vColor.g, vColor.b,  0.0f, -0.164f, 0.986f,
+            vPos.x - 0.05f, vPos.y - 0.15f, vPos.z + 0.05f,  vColor.r, vColor.g, vColor.b,  0.0f, -0.164f, 0.986f,
+            vPos.x + 0.05f, vPos.y - 0.15f, vPos.z + 0.05f,  vColor.r, vColor.g, vColor.b,  0.0f, -0.164f, 0.986f,
 
             // 왼쪽면 (x = -0.5, normal = -1, 0, 0)
             vPos.x - 0.05f, vPos.y + 0.15f, vPos.z + 0.1f,  vColor.r, vColor.g, vColor.b,  -1.0f, 0.0f, 0.0f,
@@ -20,10 +20,10 @@ private:
             vPos.x - 0.05f, vPos.y - 0.15f, vPos.z + 0.05f,  vColor.r, vColor.g, vColor.b,  -1.0f, 0.0f, 0.0f,
 
             // 뒷면 (z = -0.5, normal = 0, 0, -1)
-            vPos.x - 0.05f, vPos.y + 0.15f, vPos.z - 0.05f,  vColor.r, vColor.g, vColor.b,  0.0f, 0.0f, -1.0f,
-            vPos.x + 0.05f, vPos.y + 0.15f, vPos.z - 0.05f,  vColor.r, vColor.g, vColor.b,  0.0f, 0.0f, -1.0f,
-            vPos.x + 0.05f, vPos.y - 0.15f, vPos.z - 0.1f,  vColor.r, vColor.g, vColor.b,  0.0f, 0.0f, -1.0f,
-            vPos.x - 0.05f, vPos.y - 0.15f, vPos.z - 0.1f,  vColor.r, vColor.g, vColor.b,  0.0f, 0.0f, -1.0f,
+            vPos.x - 0.05f, vPos.y + 0.15f, vPos.z - 0.05f,  vColor.r, vColor.g, vColor.b,  0.0f, 0.164f, -0.986f,
+            vPos.x + 0.05f, vPos.y + 0.15f, vPos.z - 0.05f,  vColor.r, vColor.g, vColor.b,  0.0f, 0.164f, -0.986f,
+            vPos.x + 0.05f, vPos.y - 0.15f, vPos.z - 0.1f,  vColor.r, vColor.g, vColor.b,  0.0f, 0.164f, -0.986f,
+            vPos.x - 0.05f, vPos.y - 0.15f, vPos.z - 0.1f,  vColor.r, vColor.g, vColor.b,  0.0f, 0.164f, -0.986f,
 
             // 오른쪽면 (x = +0.5, normal = 1, 0, 0)
             vPos.x + 0.05f, vPos.y + 0.15f, vPos.z - 0.05f,  vColor.r, vColor.g, vColor.b,  1.0f, 0.0f, 0.0f,
