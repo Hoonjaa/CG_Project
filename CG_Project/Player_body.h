@@ -67,6 +67,12 @@ public:
     glm::vec3 right;    // 오른쪽 방향 벡터
     float moveSpeed;    // 이동 속도
 
+    // 플레이어 1인칭 카메라 변수
+    glm::vec3 face_dir; // 카메라가 바라보는 방향 벡터 (Y축 자유)
+    glm::vec3 up;       // 위쪽 방향 벡터
+    float pitch;        // 상하 회전각 (라디안)
+    float yaw;          // 좌우 회전각 (라디안)
+
     // 이동량 반환 메서드들 (실제 이동은 TreeNode에서 처리)
     glm::vec3 getForwardMovement();
     glm::vec3 getBackwardMovement();
@@ -76,6 +82,11 @@ public:
     // 방향 관련 메서드
     GLvoid setForwardDirection(const glm::vec3& forward);
     glm::vec3 getForwardDirection() const;
+
+    // 1인칭 카메라 관련 메서드
+    glm::vec3 getFaceDirection() const;
+    glm::vec3 getCameraPosition(const glm::vec3& playerPosition) const;
+    GLvoid updateFaceDirection(float deltaYaw, float deltaPitch);
 
 public:
     Player_body();

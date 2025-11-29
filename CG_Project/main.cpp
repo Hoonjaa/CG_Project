@@ -14,6 +14,7 @@ GLvoid SpecialKeyboard(int key, int x, int y);
 // 마우스 이벤트 처리 함수
 GLvoid Mouse(int button, int state, int x, int y);
 GLvoid Motion(int x, int y);
+GLvoid PassiveMotion(int x, int y); // 추가: 마우스 버튼을 누르지 않은 상태에서의 움직임
 GLvoid Win_to_GL_mouse(int x, int y, GLfloat& gl_x, GLfloat& gl_y);
 // 타이머 함수
 GLvoid TimerFunction(int value);
@@ -22,6 +23,7 @@ GLvoid TimerFunction(int value);
 // 뷰 및 투영 변환 행렬
 GLvoid setViewPerspectiveMatrix();
 glm::mat4 getViewPerspectiveMatrix();
+glm::mat4 getThirdPersonViewMatrix();
 // 변환 행렬 업데이트
 GLvoid updateTransformMatrix();
 
@@ -45,6 +47,10 @@ bool key_a = false;
 bool key_s = false;
 bool key_d = false;
 
+// 플레이어 바라보는 방향 관련 변수
+int centerX = 400, centerY = 400; // 화면 중앙 좌표
+bool firstMouse = true;
+bool mouseWarped = false; // 마우스가 강제로 이동했는지 체크하는 플래그
 
 //Cube* cube = nullptr; 예시임 포인터로 객체 선언
 // 포인터로 하는 이유는 셰이더가 만들어지는 등 기본 세팅 코드가 먼저 작동해야 객체 생성가능
@@ -105,6 +111,7 @@ void main(int argc, char** argv)										//--- 윈도우 출력하고 콜백함수 설정
 	glutSpecialFunc(SpecialKeyboard);
 	glutMouseFunc(Mouse);
 	glutMotionFunc(Motion);
+	glutPassiveMotionFunc(PassiveMotion); // 추가: 마우스 버튼을 누르지 않은 상태에서의 움직임 감지
 	glutMainLoop();
 }
 
@@ -205,7 +212,27 @@ GLvoid drawScene()														//--- 콜백 함수: 그리기 콜백 함수
 	// 현재 Transform_matrix는 뷰 및 투영 변환 행렬임
 
 	// 결과적으론 cube->draw(shaderProgramID, Transform_matrix); 함수 하나 만으로 애니메이션까지 다 처리 가능하게
-	player->render(getViewPerspectiveMatrix());
+	glm::mat4 viewMatrix;
+	glm::vec3 viewPos;
+
+	if (player && player->isFirstPersonMode()) {
+		viewMatrix = player->getFirstPersonViewMatrix();
+		viewPos = player->getPosition() + glm::vec3(0.0f, 0.7f, 0.0f); // 카메라 위치 (조명용임 실제로 바꾸는건 Player_body로)
+	}
+	else {
+		viewMatrix = getThirdPersonViewMatrix();
+		viewPos = glm::vec3(0.0f, 10.0f, 20.0f);
+	}
+
+	// viewPos uniform 설정
+	unsigned int viewPosLocation = glGetUniformLocation(shaderProgramID, "viewPos");
+	glUniform3f(viewPosLocation, viewPos.x, viewPos.y, viewPos.z);
+
+	// 투영 행렬
+	glm::mat4 projection = glm::perspective(glm::radians(70.0f), 1.0f, 0.1f, 100.0f);
+	glm::mat4 viewProjectionMatrix = projection * viewMatrix;
+
+	player->render(viewProjectionMatrix);
 
 
 	glutSwapBuffers();													// 화면에 출력하기
@@ -214,13 +241,73 @@ GLvoid drawScene()														//--- 콜백 함수: 그리기 콜백 함수
 GLvoid Reshape(int w, int h)											//--- 콜백 함수: 다시 그리기 콜백 함수
 {
 	glViewport(0, 0, w, h);
+	WindowWidth = w;
+	WindowHeight = h;
+	centerX = w / 2;
+	centerY = h / 2;
 }
 
 GLvoid Motion(int x, int y) {
-	GLfloat gl_x, gl_y;
-	Win_to_GL_mouse(x, y, gl_x, gl_y);
+	// 마우스가 강제로 이동된 경우 무시
+	if (mouseWarped) {
+		mouseWarped = false;
+		return;
+	}
 
+	if (firstMouse) {
+		firstMouse = false;
+		return;
+	}
+
+	// 1인칭 모드에서만 처리
+	if (player && player->isFirstPersonMode()) {
+		float deltaX = x - centerX;
+		float deltaY = y - centerY;
+
+		// 델타가 너무 작으면 무시 (노이즈 제거)
+		if (abs(deltaX) < 1 && abs(deltaY) < 1) {
+			return;
+		}
+
+		player->handleMouseMovement(deltaX, deltaY);
+
+		// 마우스를 화면 중앙으로 다시 이동
+		mouseWarped = true;
+		glutWarpPointer(centerX, centerY);
+		glutPostRedisplay();
+	}
 	glutPostRedisplay();
+}
+
+GLvoid PassiveMotion(int x, int y) {
+	// 마우스가 강제로 이동된 경우 무시
+	if (mouseWarped) {
+		mouseWarped = false;
+		return;
+	}
+
+	if (firstMouse) {
+		firstMouse = false;
+		return;
+	}
+
+	// 1인칭 모드에서만 처리
+	if (player && player->isFirstPersonMode()) {
+		float deltaX = x - centerX;
+		float deltaY = y - centerY;
+
+		// 델타가 너무 작으면 무시 (노이즈 제거)
+		if (abs(deltaX) < 1 && abs(deltaY) < 1) {
+			return;
+		}
+
+		player->handleMouseMovement(deltaX, deltaY);
+
+		// 마우스를 화면 중앙으로 다시 이동
+		mouseWarped = true;
+		glutWarpPointer(centerX, centerY);
+		glutPostRedisplay();
+	}
 }
 
 GLvoid Mouse(int button, int state, int x, int y) {
@@ -257,6 +344,17 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 			glDisable(GL_CULL_FACE);
 		else
 			glEnable(GL_CULL_FACE);
+		break;
+	case 'c':
+		if (player) {
+			player->toggleViewMode();
+			// 1인칭 모드로 전환할 때 마우스를 중앙에 위치
+			if (player->isFirstPersonMode()) {
+				glutWarpPointer(centerX, centerY);
+				firstMouse = true;
+				mouseWarped = true;
+			}
+		}
 		break;
 	case 'w':
 		key_w = true;
@@ -341,4 +439,12 @@ glm::mat4 getViewPerspectiveMatrix() {
 GLvoid updateTransformMatrix() {
 	unsigned int modelLocation = glGetUniformLocation(shaderProgramID, "Transform");
 	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(Transform_matrix));
+}
+
+glm::mat4 getThirdPersonViewMatrix() {
+	glm::vec3 eye = glm::vec3(0.0f, 10.0f, 20.0f);
+	glm::vec3 center = glm::vec3(0.0f, 0.0f, 0.0f);
+	glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+
+	return glm::lookAt(eye, center, up);
 }

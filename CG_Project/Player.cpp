@@ -5,11 +5,12 @@ GLvoid Player::setup(GLuint shader) {
 
 	auto P_body = std::make_shared<Player_body>();
 	player_body = std::make_shared<Object_Part>(P_body, shader);
+	player_body->translate(glm::vec3(0.0f, 1.0f, 0.0f));
 	root->addChild(player_body);
 
 	auto G_body = std::make_shared<Gun_body>();
 	gun_body = std::make_shared<Object_Part>(G_body, shader);
-	gun_body->translate(glm::vec3(-0.55f, 0.4f, 0.5f));
+	gun_body->translate(glm::vec3(-0.3f, 0.45f, 0.7f));
 	player_body->addChild(gun_body);
 
 	auto G_cover = std::make_shared<Gun_cover>();
@@ -69,4 +70,50 @@ glm::vec3 Player::getPosition() const
 		return glm::vec3(worldTransform[3][0], worldTransform[3][1], worldTransform[3][2]);
 	}
 	return glm::vec3(0.0f);
+}
+
+GLvoid Player::handleMouseMovement(float deltaX, float deltaY)
+{
+	if (player_body && player_body->getObject()) {
+		auto playerBodyObj = std::dynamic_pointer_cast<Player_body>(player_body->getObject());
+		if (playerBodyObj) {
+			// 마우스 이동을 face_dir 업데이트에 사용
+			playerBodyObj->updateFaceDirection(deltaX, -deltaY); // Y축 반전
+		}
+	}
+}
+
+glm::mat4 Player::getFirstPersonViewMatrix() const
+{
+	if (player_body && player_body->getObject()) {
+		auto playerBodyObj = std::dynamic_pointer_cast<Player_body>(player_body->getObject());
+		if (playerBodyObj) {
+			glm::vec3 playerPos = getPosition();
+			glm::vec3 cameraPos = playerBodyObj->getCameraPosition(playerPos);
+			glm::vec3 faceDir = playerBodyObj->getFaceDirection();
+			glm::vec3 upDir = glm::vec3(0.0f, 1.0f, 0.0f);
+
+			return glm::lookAt(cameraPos, cameraPos + faceDir, upDir);
+		}
+	}
+	return glm::mat4(1.0f);
+}
+
+glm::mat4 Player::getThirdPersonViewMatrix() const
+{
+	glm::vec3 eye = glm::vec3(0.0f, 10.0f, 20.0f);
+	glm::vec3 center = glm::vec3(0.0f, 0.0f, 0.0f);
+	glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+
+	return glm::lookAt(eye, center, up);
+}
+
+GLvoid Player::toggleViewMode()
+{
+	firstPersonMode = !firstPersonMode;
+}
+
+bool Player::isFirstPersonMode() const
+{
+	return firstPersonMode;
 }
