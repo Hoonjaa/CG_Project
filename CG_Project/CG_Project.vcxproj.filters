@@ -51,6 +51,9 @@
     <ClCompile Include="Gun_cover.cpp">
       <Filter>소스 파일\객체\플레이어</Filter>
     </ClCompile>
+    <ClCompile Include="Gun_barrel.cpp">
+      <Filter>소스 파일\객체\플레이어</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -78,6 +81,9 @@
       <Filter>소스 파일\객체\플레이어</Filter>
     </ClInclude>
     <ClInclude Include="Gun_cover.h">
+      <Filter>소스 파일\객체\플레이어</Filter>
+    </ClInclude>
+    <ClInclude Include="Gun_barrel.h">
       <Filter>소스 파일\객체\플레이어</Filter>
     </ClInclude>
   </ItemGroup>
