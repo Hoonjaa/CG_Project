@@ -25,6 +25,9 @@
     <Filter Include="소스 파일\객체\플레이어">
       <UniqueIdentifier>{dbb3cc98-d3c9-42f9-9242-8df9d9188a16}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\객체\총알">
+      <UniqueIdentifier>{90f16751-77ca-4773-9d89-1c5c4c6ee5c5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -59,6 +62,9 @@
     </ClCompile>
     <ClCompile Include="Gun_magazine.cpp">
       <Filter>소스 파일\객체\플레이어</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>소스 파일\객체\총알</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -97,6 +103,9 @@
     </ClInclude>
     <ClInclude Include="Gun_magazine.h">
       <Filter>소스 파일\객체\플레이어</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>소스 파일\객체\총알</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

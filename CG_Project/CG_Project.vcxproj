@@ -124,6 +124,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Gun_barrel.cpp" />
     <ClCompile Include="Gun_body.cpp" />
     <ClCompile Include="Gun_cover.cpp" />
@@ -137,6 +138,7 @@
     <ClCompile Include="Random.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bullet.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="Gun_barrel.h" />
     <ClInclude Include="Gun_body.h" />

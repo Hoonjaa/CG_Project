@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Player.h"
 #include "Cube.h"
+#include "Bullet.h"
 
 //--- 아래 5개 함수는 사용자 정의 함수임
 void make_vertexShaders();
@@ -58,6 +59,7 @@ bool mouseWarped = false; // 마우스가 강제로 이동했는지 체크하는 플래그
 // 따라서 main 함수 안에서 new로 객체 생성
 Player* player = nullptr;
 Cube* cube = nullptr;
+std::vector<Bullet*> bullets;
 
 char* filetobuf(const char* file)
 {
@@ -238,6 +240,12 @@ GLvoid drawScene()														//--- 콜백 함수: 그리기 콜백 함수
 	player->render(viewProjectionMatrix);
 	cube->draw(shaderProgramID, glm::mat4(1.0f), viewProjectionMatrix);
 
+	for (auto* bullet : bullets) {
+		if (bullet) {
+			bullet->draw(shaderProgramID, glm::mat4(1.0f), viewProjectionMatrix);
+		}
+	}
+
 	glutSwapBuffers();													// 화면에 출력하기
 }
 //--- 다시그리기 콜백 함수
@@ -317,7 +325,20 @@ GLvoid Mouse(int button, int state, int x, int y) {
 	GLfloat gl_x, gl_y;
 	Win_to_GL_mouse(x, y, gl_x, gl_y);
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+		if (player && player->canFire && player->bulletCount > 0) {
+			// 총구 위치에서 총알 생성
+			glm::vec3 muzzlePos = player->getMuzzlePosition();
+			glm::vec3 fireDir = player->getFireDirection();
 
+			// 총알 생성
+			Bullet* newBullet = new Bullet(muzzlePos, player->getFireDirection());
+			bullets.push_back(newBullet);
+
+			// 총알 수 감소
+			player->bulletCount--;
+
+			std::cout << "총알 발사! 남은 총알: " << player->bulletCount << std::endl;
+		}
 	}
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) {
 
@@ -405,6 +426,17 @@ GLvoid TimerFunction(int value)
 {
 	if (player) {
 		player->processMovement(key_w, key_a, key_s, key_d);
+	}
+	for (int i = bullets.size() - 1; i >= 0; i--) {
+		if (bullets[i]) {
+			bullets[i]->update();
+
+			// 생명주기가 끝난 총알 삭제
+			if (bullets[i]->Destroy()) {
+				delete bullets[i];
+				bullets.erase(bullets.begin() + i);
+			}
+		}
 	}
 	glutPostRedisplay();
 	if (Timer) {

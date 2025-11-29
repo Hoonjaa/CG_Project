@@ -108,7 +108,7 @@ GLvoid Player_body::updateFaceDirection(float deltaYaw, float deltaPitch)
 	yaw += deltaYaw * sensitivity;
 	pitch += deltaPitch * sensitivity;
 
-	// pitch를 -89도에서 +89도 사이로 제한 (위아래 시야 제한)
+	// pitch를 -50도에서 +50도 사이로 제한 (위아래 시야 제한)
 	const float maxPitch = glm::radians(50.0f);
 	if (pitch > maxPitch) pitch = maxPitch;
 	if (pitch < -maxPitch) pitch = -maxPitch;

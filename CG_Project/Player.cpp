@@ -1,5 +1,70 @@
 #include "Player.h"
 
+glm::vec3 Player::getFireDirection() const
+{
+	if (player_body && player_body->getObject()) {
+		auto playerBodyObj = std::dynamic_pointer_cast<Player_body>(player_body->getObject());
+		if (playerBodyObj) {
+			if (firstPersonMode) {
+				// 1인칭 모드에서는 카메라가 바라보는 방향으로 발사
+				return playerBodyObj->getFaceDirection();
+			}
+			else {
+				// 3인칭 모드에서는 플레이어 앞쪽 방향으로 발사
+				return playerBodyObj->getForwardDirection();
+			}
+		}
+	}
+	return glm::vec3(0.0f, 0.0f, -1.0f); // 기본값
+}
+
+glm::vec3 Player::getRightDirection() const
+{
+	if (player_body && player_body->getObject()) {
+		auto playerBodyObj = std::dynamic_pointer_cast<Player_body>(player_body->getObject());
+		if (playerBodyObj) {
+			if (firstPersonMode) {
+				// 1인칭 모드: 카메라의 face_dir를 기준으로 오른쪽 벡터 계산
+				glm::vec3 faceDir = playerBodyObj->getFaceDirection();
+				glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+				return glm::normalize(glm::cross(faceDir, up));
+			}
+			else {
+				// 3인칭 모드: 플레이어의 forward를 기준으로 오른쪽 벡터 계산
+				glm::vec3 forward = playerBodyObj->getForwardDirection();
+				glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+				return glm::normalize(glm::cross(forward, up));
+			}
+		}
+	}
+	return glm::vec3(1.0f, 0.0f, 0.0f); // 기본값 (오른쪽)
+}
+
+glm::vec3 Player::getMuzzlePosition() const
+{
+	glm::vec3 playerPos = getPosition();
+	glm::vec3 fireDir = getFireDirection();
+	glm::vec3 rightDir = getRightDirection();
+
+	// 총구 위치 계산
+	glm::vec3 muzzlePos = playerPos;
+
+	if (firstPersonMode) {
+		// 1인칭 모드: 카메라(눈) 위치 기준으로 총구 위치 계산
+		muzzlePos.y += 0.3f; // 눈 높이
+		muzzlePos += rightDir * 0.4f; // 오른쪽으로 약간 이동 (총이 오른쪽에 있다고 가정)
+		muzzlePos += fireDir * 1.7f; // 앞쪽으로 약간 이동 (총구가 앞에 있음)
+	}
+	else {
+		// 3인칭 모드: 플레이어 몸체 기준으로 총구 위치 계산
+		muzzlePos.y += 0.8f; // 어깨 높이
+		muzzlePos += rightDir * 0.3f; // 오른쪽으로 이동
+		muzzlePos += fireDir * 0.5f; // 앞쪽으로 이동
+	}
+
+	return muzzlePos;
+}
+
 GLvoid Player::setup(GLuint shader) {
 	root = std::make_shared<TreeNode>();
 

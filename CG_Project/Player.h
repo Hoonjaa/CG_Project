@@ -25,11 +25,20 @@ private:
 	GLvoid updateGunRotation();
 
 public:
+	// 총알 관련 변수
+	GLint bulletCount = 30;
+	bool canFire = true;
+
+public:
 	GLvoid setup(GLuint shader);
 	GLvoid render(const glm::mat4& viewProjectionMatrix);
 	// 이동 관련 함수
 	GLvoid processMovement(bool w_pressed, bool a_pressed, bool s_pressed, bool d_pressed);
 	glm::vec3 getPosition() const;
+	// 총알 관련 변수
+	glm::vec3 getFireDirection() const; //총알 발사 방향
+	glm::vec3 getRightDirection() const; // 플레이어 오른쪽 방향
+	glm::vec3 getMuzzlePosition() const; // 총구 위치
 
 	// 1인칭 카메라 관련 함수
 	GLvoid handleMouseMovement(float deltaX, float deltaY);
