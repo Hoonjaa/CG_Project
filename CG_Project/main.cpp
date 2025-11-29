@@ -270,7 +270,7 @@ GLvoid TimerFunction(int value)
 }
 
 GLvoid setViewPerspectiveMatrix() {
-	glm::vec3 eye = glm::vec3(-5.0f, 2.0f, 0.0f);
+	glm::vec3 eye = glm::vec3(-5.0f, 0.0f, 0.0f);
 	unsigned int viewPosLocation = glGetUniformLocation(shaderProgramID, "viewPos");
 	glUniform3f(viewPosLocation, eye.x, eye.y, eye.z);
 
@@ -284,7 +284,7 @@ GLvoid setViewPerspectiveMatrix() {
 }
 
 glm::mat4 getViewPerspectiveMatrix() {
-	glm::vec3 eye = glm::vec3(-5.0f, 2.0f, 0.0f);
+	glm::vec3 eye = glm::vec3(-5.0f, 0.0f, 0.0f);
 	unsigned int viewPosLocation = glGetUniformLocation(shaderProgramID, "viewPos");
 	glUniform3f(viewPosLocation, eye.x, eye.y, eye.z);
 

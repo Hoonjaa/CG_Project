@@ -21,6 +21,11 @@ GLvoid Player::setup(GLuint shader) {
 	gun_barrel = std::make_shared<Object_Part>(G_barrel, shader);
 	gun_barrel->translate(glm::vec3(0.0f, 0.0f, 0.7f));
 	gun_body->addChild(gun_barrel);
+
+	auto G_handle = std::make_shared<Gun_handle>();
+	gun_handle = std::make_shared<Object_Part>(G_handle, shader);
+	gun_handle->translate(glm::vec3(0.0f, -0.25f, -0.45f));
+	gun_body->addChild(gun_handle);
 }
 
 GLvoid Player::render(const glm::mat4& viewProjectionMatrix) {
