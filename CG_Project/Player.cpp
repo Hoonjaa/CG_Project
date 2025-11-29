@@ -14,7 +14,7 @@ GLvoid Player::setup(GLuint shader) {
 
 	auto G_cover = std::make_shared<Gun_cover>();
 	gun_cover = std::make_shared<Object_Part>(G_cover, shader);
-	gun_cover->translate(glm::vec3(0.0f, 0.0f, 0.2f));
+	gun_cover->translate(glm::vec3(0.0f, 0.0f, 0.25f));
 	gun_body->addChild(gun_cover);
 
 	auto G_barrel = std::make_shared<Gun_barrel>();
@@ -29,7 +29,7 @@ GLvoid Player::setup(GLuint shader) {
 
 	auto G_magazine = std::make_shared<Gun_magazine>();
 	gun_magazine = std::make_shared<Object_Part>(G_magazine, shader);
-	gun_magazine->translate(glm::vec3(0.0f, -0.3f, -0.125f));
+	gun_magazine->translate(glm::vec3(0.0f, -0.3f, -0.025f));
 	gun_body->addChild(gun_magazine);
 }
 
