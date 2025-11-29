@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "Cube.h"
+#include "Player.h"
 
 //--- 아래 5개 함수는 사용자 정의 함수임
 void make_vertexShaders();
@@ -20,6 +20,7 @@ GLvoid TimerFunction(int value);
 // --------------여기부터 필요한 함수들 선언하는 구역-------------
 // 뷰 및 투영 변환 행렬
 GLvoid setViewPerspectiveMatrix();
+glm::mat4 getViewPerspectiveMatrix();
 // 변환 행렬 업데이트
 GLvoid updateTransformMatrix();
 
@@ -40,8 +41,7 @@ glm::mat4 Transform_matrix{ 1.0f };
 //Cube* cube = nullptr; 예시임 포인터로 객체 선언
 // 포인터로 하는 이유는 셰이더가 만들어지는 등 기본 세팅 코드가 먼저 작동해야 객체 생성가능
 // 따라서 main 함수 안에서 new로 객체 생성
-Cube* cube = nullptr;
-
+Player* player = nullptr;
 
 
 char* filetobuf(const char* file)
@@ -84,7 +84,8 @@ void main(int argc, char** argv)										//--- 윈도우 출력하고 콜백함수 설정
 
 	// --------------기본 객체 생성 시 여기서 작업-------------
 	// cube = new Cube(); 이런식
-	cube = new Cube();
+	player = new Player();
+	player->setup(shaderProgramID);
 
 
 	setViewPerspectiveMatrix();
@@ -194,7 +195,7 @@ GLvoid drawScene()														//--- 콜백 함수: 그리기 콜백 함수
 	// 현재 Transform_matrix는 뷰 및 투영 변환 행렬임
 
 	// 결과적으론 cube->draw(shaderProgramID, Transform_matrix); 함수 하나 만으로 애니메이션까지 다 처리 가능하게
-	cube->draw(shaderProgramID, glm::mat4(1.0f), Transform_matrix);
+	player->render(getViewPerspectiveMatrix());
 
 
 	glutSwapBuffers();													// 화면에 출력하기
@@ -269,7 +270,7 @@ GLvoid TimerFunction(int value)
 }
 
 GLvoid setViewPerspectiveMatrix() {
-	glm::vec3 eye = glm::vec3(-2.0f, 2.0f, 5.0f);
+	glm::vec3 eye = glm::vec3(-5.0f, 2.0f, 0.0f);
 	unsigned int viewPosLocation = glGetUniformLocation(shaderProgramID, "viewPos");
 	glUniform3f(viewPosLocation, eye.x, eye.y, eye.z);
 
@@ -280,6 +281,19 @@ GLvoid setViewPerspectiveMatrix() {
 
 	Transform_matrix = projection * view;
 	updateTransformMatrix();
+}
+
+glm::mat4 getViewPerspectiveMatrix() {
+	glm::vec3 eye = glm::vec3(-5.0f, 2.0f, 0.0f);
+	unsigned int viewPosLocation = glGetUniformLocation(shaderProgramID, "viewPos");
+	glUniform3f(viewPosLocation, eye.x, eye.y, eye.z);
+
+	glm::mat4 view = glm::lookAt(eye,
+		glm::vec3(0.0f, 0.0f, 0.0f),
+		glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::mat4 projection = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 100.0f);
+
+	return projection * view;
 }
 
 GLvoid updateTransformMatrix() {

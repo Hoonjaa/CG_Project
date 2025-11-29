@@ -124,16 +124,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Gun_body.cpp" />
+    <ClCompile Include="Gun_cover.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Cube.cpp" />
     <ClCompile Include="Object.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Player_body.cpp" />
     <ClCompile Include="Random.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cube.h" />
+    <ClInclude Include="Gun_body.h" />
+    <ClInclude Include="Gun_cover.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Object_part.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="Player_body.h" />
     <ClInclude Include="TreeNode.h" />
   </ItemGroup>
   <ItemGroup>

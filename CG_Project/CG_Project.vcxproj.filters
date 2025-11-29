@@ -22,6 +22,9 @@
     <Filter Include="소스 파일\트리 객체">
       <UniqueIdentifier>{18a34bd5-5ceb-4670-ac93-eaa64c7c8eef}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\객체\플레이어">
+      <UniqueIdentifier>{dbb3cc98-d3c9-42f9-9242-8df9d9188a16}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -35,6 +38,18 @@
     </ClCompile>
     <ClCompile Include="Cube.cpp">
       <Filter>소스 파일\객체</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>소스 파일\객체\플레이어</Filter>
+    </ClCompile>
+    <ClCompile Include="Player_body.cpp">
+      <Filter>소스 파일\객체\플레이어</Filter>
+    </ClCompile>
+    <ClCompile Include="Gun_body.cpp">
+      <Filter>소스 파일\객체\플레이어</Filter>
+    </ClCompile>
+    <ClCompile Include="Gun_cover.cpp">
+      <Filter>소스 파일\객체\플레이어</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -52,6 +67,18 @@
     </ClInclude>
     <ClInclude Include="Object_part.h">
       <Filter>소스 파일\트리 객체</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>소스 파일\객체\플레이어</Filter>
+    </ClInclude>
+    <ClInclude Include="Player_body.h">
+      <Filter>소스 파일\객체\플레이어</Filter>
+    </ClInclude>
+    <ClInclude Include="Gun_body.h">
+      <Filter>소스 파일\객체\플레이어</Filter>
+    </ClInclude>
+    <ClInclude Include="Gun_cover.h">
+      <Filter>소스 파일\객체\플레이어</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
