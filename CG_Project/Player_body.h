@@ -62,6 +62,22 @@ private:
     };
 
 public:
+    // 플레이어 방향과 이동 관련 변수
+    glm::vec3 forward;  // 앞쪽 방향 벡터
+    glm::vec3 right;    // 오른쪽 방향 벡터
+    float moveSpeed;    // 이동 속도
+
+    // 이동량 반환 메서드들 (실제 이동은 TreeNode에서 처리)
+    glm::vec3 getForwardMovement();
+    glm::vec3 getBackwardMovement();
+    glm::vec3 getLeftMovement();
+    glm::vec3 getRightMovement();
+
+    // 방향 관련 메서드
+    GLvoid setForwardDirection(const glm::vec3& forward);
+    glm::vec3 getForwardDirection() const;
+
+public:
     Player_body();
 	~Player_body();
 

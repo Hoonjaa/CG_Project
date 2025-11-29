@@ -38,3 +38,35 @@ GLvoid Player::render(const glm::mat4& viewProjectionMatrix) {
 		root->render(viewProjectionMatrix);
 	}
 }
+
+GLvoid Player::processMovement(bool w_pressed, bool a_pressed, bool s_pressed, bool d_pressed)
+{
+	if (player_body && player_body->getObject()) {
+		auto playerBodyObj = std::dynamic_pointer_cast<Player_body>(player_body->getObject());
+		if (playerBodyObj) {
+			// TreeNode의 translate를 직접 사용하여 이동
+			if (w_pressed) {
+				player_body->translate(playerBodyObj->getForwardMovement());
+			}
+			if (s_pressed) {
+				player_body->translate(playerBodyObj->getBackwardMovement());
+			}
+			if (a_pressed) {
+				player_body->translate(playerBodyObj->getLeftMovement());
+			}
+			if (d_pressed) {
+				player_body->translate(playerBodyObj->getRightMovement());
+			}
+		}
+	}
+}
+
+glm::vec3 Player::getPosition() const
+{
+	if (player_body) {
+		// TreeNode의 월드 변환에서 위치 추출
+		glm::mat4 worldTransform = player_body->getWorldTransform();
+		return glm::vec3(worldTransform[3][0], worldTransform[3][1], worldTransform[3][2]);
+	}
+	return glm::vec3(0.0f);
+}

@@ -23,5 +23,8 @@ private:
 public:
 	GLvoid setup(GLuint shader);
 	GLvoid render(const glm::mat4& viewProjectionMatrix);
+	// 이동 관련 함수
+	GLvoid processMovement(bool w_pressed, bool a_pressed, bool s_pressed, bool d_pressed);
+	glm::vec3 getPosition() const;
 };
 

@@ -9,6 +9,7 @@ GLvoid drawScene();
 GLvoid Reshape(int w, int h);
 // 키보드 이벤트 처리 함수
 GLvoid Keyboard(unsigned char key, int x, int y);
+GLvoid KeyboardUp(unsigned char key, int x, int y);
 GLvoid SpecialKeyboard(int key, int x, int y);
 // 마우스 이벤트 처리 함수
 GLvoid Mouse(int button, int state, int x, int y);
@@ -37,6 +38,13 @@ GLuint fragmentShader;													//--- 프래그먼트 세이더 객체
 GLint WindowWidth = 800, WindowHeight = 800;
 bool Timer = true; // 타이머 사용중
 glm::mat4 Transform_matrix{ 1.0f };
+
+// 플레이어 이동
+bool key_w = false;
+bool key_a = false;
+bool key_s = false;
+bool key_d = false;
+
 
 //Cube* cube = nullptr; 예시임 포인터로 객체 선언
 // 포인터로 하는 이유는 셰이더가 만들어지는 등 기본 세팅 코드가 먼저 작동해야 객체 생성가능
@@ -88,10 +96,12 @@ void main(int argc, char** argv)										//--- 윈도우 출력하고 콜백함수 설정
 	player->setup(shaderProgramID);
 
 
+	glutTimerFunc(16, TimerFunction, 1);
 	setViewPerspectiveMatrix();
 	glutDisplayFunc(drawScene);											//--- 출력 콜백 함수
 	glutReshapeFunc(Reshape);
 	glutKeyboardFunc(Keyboard);
+	glutKeyboardUpFunc(KeyboardUp);
 	glutSpecialFunc(SpecialKeyboard);
 	glutMouseFunc(Mouse);
 	glutMotionFunc(Motion);
@@ -248,6 +258,36 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 		else
 			glEnable(GL_CULL_FACE);
 		break;
+	case 'w':
+		key_w = true;
+		break;
+	case 'a':
+		key_a = true;
+		break;
+	case 's':
+		key_s = true;
+		break;
+	case 'd':
+		key_d = true;
+		break;
+	}
+	glutPostRedisplay();
+}
+
+GLvoid KeyboardUp(unsigned char key, int x, int y) {
+	switch (key) {
+	case 'w':
+		key_w = false;
+		break;
+	case 'a':
+		key_a = false;
+		break;
+	case 's':
+		key_s = false;
+		break;
+	case 'd':
+		key_d = false;
+		break;
 	}
 	glutPostRedisplay();
 }
@@ -262,7 +302,9 @@ GLvoid SpecialKeyboard(int key, int x, int y)
 
 GLvoid TimerFunction(int value)
 {
-
+	if (player) {
+		player->processMovement(key_w, key_a, key_s, key_d);
+	}
 	glutPostRedisplay();
 	if (Timer) {
 		glutTimerFunc(16, TimerFunction, 1);
@@ -270,7 +312,7 @@ GLvoid TimerFunction(int value)
 }
 
 GLvoid setViewPerspectiveMatrix() {
-	glm::vec3 eye = glm::vec3(-5.0f, 1.0f, 0.0f);
+	glm::vec3 eye = glm::vec3(0.0f, 10.0f, 20.0f);
 	unsigned int viewPosLocation = glGetUniformLocation(shaderProgramID, "viewPos");
 	glUniform3f(viewPosLocation, eye.x, eye.y, eye.z);
 
@@ -284,7 +326,7 @@ GLvoid setViewPerspectiveMatrix() {
 }
 
 glm::mat4 getViewPerspectiveMatrix() {
-	glm::vec3 eye = glm::vec3(-5.0f, 1.0f, 0.0f);
+	glm::vec3 eye = glm::vec3(0.0f, 10.0f, 20.0f);
 	unsigned int viewPosLocation = glGetUniformLocation(shaderProgramID, "viewPos");
 	glUniform3f(viewPosLocation, eye.x, eye.y, eye.z);
 

@@ -3,6 +3,12 @@
 Player_body::Player_body()
 {
 	vColor = glm::vec3(0.0f, 0.8f, 0.0f);
+
+	// 초기 방향 설정 (+z 방향을 바라보고 있음)
+	forward = glm::vec3(0.0f, 0.0f, 1.0f);
+	right = glm::vec3(1.0f, 0.0f, 0.0f);
+	moveSpeed = 0.1f; // 프레임당 이동 거리
+
 	setVertexInfo();
 	// VBO: 정점 데이터
 	allocate(sizeof(vertices), GL_STATIC_DRAW);
@@ -31,7 +37,6 @@ GLvoid Player_body::draw(const GLuint& ShaderID, const glm::mat4& worldMatrix, c
 
 
 
-
 	glm::mat4 finalWorldMatrix = worldMatrix * modelMatrix;
 	unsigned int modelLocation = glGetUniformLocation(ShaderID, "model");
 	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(finalWorldMatrix));
@@ -46,4 +51,36 @@ GLvoid Player_body::draw(const GLuint& ShaderID, const glm::mat4& worldMatrix, c
 GLvoid Player_body::update()
 {
 	return GLvoid();
+}
+
+glm::vec3 Player_body::getForwardMovement()
+{
+	return forward * moveSpeed;
+}
+
+glm::vec3 Player_body::getBackwardMovement()
+{
+	return -forward * moveSpeed;
+}
+
+glm::vec3 Player_body::getLeftMovement()
+{
+	return right * moveSpeed;
+}
+
+glm::vec3 Player_body::getRightMovement()
+{
+	return -right * moveSpeed;
+}
+
+GLvoid Player_body::setForwardDirection(const glm::vec3& newForward)
+{
+	forward = glm::normalize(newForward);
+	// 오른쪽 벡터를 업데이트 (Y축 기준으로 수직인 벡터)
+	right = glm::normalize(glm::cross(forward, glm::vec3(0.0f, 1.0f, 0.0f)));
+}
+
+glm::vec3 Player_body::getForwardDirection() const
+{
+	return forward;
 }
