@@ -21,6 +21,9 @@ private:
 	std::shared_ptr<Object_Part> gun_magazine;
 	bool firstPersonMode; // 1인칭/3인칭 모드 전환용
 
+	// 총 회전 업데이트를 위한 private 메서드
+	GLvoid updateGunRotation();
+
 public:
 	GLvoid setup(GLuint shader);
 	GLvoid render(const glm::mat4& viewProjectionMatrix);

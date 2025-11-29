@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Player.h"
+#include "Cube.h"
 
 //--- 아래 5개 함수는 사용자 정의 함수임
 void make_vertexShaders();
@@ -56,7 +57,7 @@ bool mouseWarped = false; // 마우스가 강제로 이동했는지 체크하는 플래그
 // 포인터로 하는 이유는 셰이더가 만들어지는 등 기본 세팅 코드가 먼저 작동해야 객체 생성가능
 // 따라서 main 함수 안에서 new로 객체 생성
 Player* player = nullptr;
-
+Cube* cube = nullptr;
 
 char* filetobuf(const char* file)
 {
@@ -96,10 +97,12 @@ void main(int argc, char** argv)										//--- 윈도우 출력하고 콜백함수 설정
 	glEnable(GL_CULL_FACE);
 	glFrontFace(GL_CCW);
 
+
 	// --------------기본 객체 생성 시 여기서 작업-------------
 	// cube = new Cube(); 이런식
 	player = new Player();
 	player->setup(shaderProgramID);
+	cube = new Cube();
 
 
 	glutTimerFunc(16, TimerFunction, 1);
@@ -233,7 +236,7 @@ GLvoid drawScene()														//--- 콜백 함수: 그리기 콜백 함수
 	glm::mat4 viewProjectionMatrix = projection * viewMatrix;
 
 	player->render(viewProjectionMatrix);
-
+	cube->draw(shaderProgramID, glm::mat4(1.0f), viewProjectionMatrix);
 
 	glutSwapBuffers();													// 화면에 출력하기
 }

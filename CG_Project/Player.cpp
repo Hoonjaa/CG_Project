@@ -35,8 +35,26 @@ GLvoid Player::setup(GLuint shader) {
 }
 
 GLvoid Player::render(const glm::mat4& viewProjectionMatrix) {
+	if (firstPersonMode && gun_body && player_body && player_body->getObject()) {
+		updateGunRotation();
+	}
+
 	if (root) {
 		root->render(viewProjectionMatrix);
+	}
+}
+
+GLvoid Player::updateGunRotation() {
+	auto playerBodyObj = std::dynamic_pointer_cast<Player_body>(player_body->getObject());
+	if (playerBodyObj) {
+		// 현재 yaw 값을 가져와서 총 회전 적용
+		float currentYaw = playerBodyObj->yaw;
+
+		// 총의 로컬 변환 초기화 (이전 회전 제거)
+		player_body->setTransform(glm::mat4(1.0f));
+
+		player_body->translate(glm::vec3(-0.3f, 0.45f, 0.7f));
+		player_body->rotate(currentYaw - glm::radians(90.0f), glm::vec3(0.0f, -1.0f, 0.0f));
 	}
 }
 
@@ -47,16 +65,16 @@ GLvoid Player::processMovement(bool w_pressed, bool a_pressed, bool s_pressed, b
 		if (playerBodyObj) {
 			// TreeNode의 translate를 직접 사용하여 이동
 			if (w_pressed) {
-				player_body->translate(playerBodyObj->getForwardMovement());
+				root->translate(playerBodyObj->getForwardMovement());
 			}
 			if (s_pressed) {
-				player_body->translate(playerBodyObj->getBackwardMovement());
+				root->translate(playerBodyObj->getBackwardMovement());
 			}
 			if (a_pressed) {
-				player_body->translate(playerBodyObj->getLeftMovement());
+				root->translate(playerBodyObj->getLeftMovement());
 			}
 			if (d_pressed) {
-				player_body->translate(playerBodyObj->getRightMovement());
+				root->translate(playerBodyObj->getRightMovement());
 			}
 		}
 	}

@@ -9,7 +9,7 @@ Player_body::Player_body()
 	right = glm::vec3(1.0f, 0.0f, 0.0f);
 	face_dir = glm::vec3(0.0f, 0.0f, 1.0f); // 카메라 초기 방향
 	up = glm::vec3(0.0f, 1.0f, 0.0f);
-	moveSpeed = 0.1f; // 프레임당 이동 거리
+	moveSpeed = 0.05f; // 프레임당 이동 거리
 	pitch = 0.0f; // 초기 pitch
 	yaw = glm::radians(90.0f);   // 초기 yaw
 
@@ -69,12 +69,12 @@ glm::vec3 Player_body::getBackwardMovement()
 
 glm::vec3 Player_body::getLeftMovement()
 {
-	return right * moveSpeed;
+	return -right * moveSpeed;
 }
 
 glm::vec3 Player_body::getRightMovement()
 {
-	return -right * moveSpeed;
+	return right * moveSpeed;
 }
 
 GLvoid Player_body::setForwardDirection(const glm::vec3& newForward)
@@ -103,13 +103,13 @@ glm::vec3 Player_body::getCameraPosition(const glm::vec3& playerPosition) const
 GLvoid Player_body::updateFaceDirection(float deltaYaw, float deltaPitch)
 {
 	// 마우스 감도 조절
-	const float sensitivity = 0.005f;
+	const float sensitivity = 0.002f;
 
 	yaw += deltaYaw * sensitivity;
 	pitch += deltaPitch * sensitivity;
 
 	// pitch를 -89도에서 +89도 사이로 제한 (위아래 시야 제한)
-	const float maxPitch = glm::radians(89.0f);
+	const float maxPitch = glm::radians(50.0f);
 	if (pitch > maxPitch) pitch = maxPitch;
 	if (pitch < -maxPitch) pitch = -maxPitch;
 
