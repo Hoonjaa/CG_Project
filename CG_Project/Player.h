@@ -7,6 +7,7 @@
 #include "Gun_cover.h"
 #include "Gun_barrel.h"
 #include "Gun_handle.h"
+#include "Gun_magazine.h"
 
 class Player
 {
@@ -17,6 +18,7 @@ private:
 	std::shared_ptr<Object_Part> gun_cover;
 	std::shared_ptr<Object_Part> gun_barrel;
 	std::shared_ptr<Object_Part> gun_handle;
+	std::shared_ptr<Object_Part> gun_magazine;
 
 public:
 	GLvoid setup(GLuint shader);
