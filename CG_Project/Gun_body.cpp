@@ -2,7 +2,7 @@
 
 Gun_body::Gun_body()
 {
-	vColor = glm::vec3(0.7f, 0.7f, 0.7f);
+	vColor = glm::vec3(0.5f, 0.5f, 0.5f);
 	setVertexInfo();
 	// VBO: 정점 데이터
 	allocate(sizeof(vertices), GL_STATIC_DRAW);
