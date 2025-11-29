@@ -2,7 +2,7 @@
 
 Player_body::Player_body()
 {
-	vColor = glm::vec3(1.0f, 0.5f, 0.3f);
+	vColor = glm::vec3(0.0f, 0.8f, 0.0f);
 	setVertexInfo();
 	// VBO: 정점 데이터
 	allocate(sizeof(vertices), GL_STATIC_DRAW);
