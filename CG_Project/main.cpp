@@ -203,7 +203,7 @@ GLvoid drawScene()														//--- 콜백 함수: 그리기 콜백 함수
 
 	// 조명 관련 uniform 변수들 설정
 	unsigned int lightPosLocation = glGetUniformLocation(shaderProgramID, "lightPos"); //--- lightPos 값 전달: (0.0, 0.0, 5.0);
-	glUniform3f(lightPosLocation, 5.0f, 10.0f, 5.0f);
+	glUniform3f(lightPosLocation, 0.0f, 10.0f, 0.0f);
 	unsigned int lightColorLocation = glGetUniformLocation(shaderProgramID, "lightColor"); //--- lightColor 값 전달: (1.0, 1.0, 1.0) 백색
 	glUniform3f(lightColorLocation, 1.0f, 1.0f, 1.0f);
 
