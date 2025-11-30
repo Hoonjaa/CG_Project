@@ -39,6 +39,12 @@ public:
 	glm::vec3 getFireDirection() const; //총알 발사 방향
 	glm::vec3 getRightDirection() const; // 플레이어 오른쪽 방향
 	glm::vec3 getMuzzlePosition() const; // 총구 위치
+	// 재장전 애니메이션 관련 함수& 변수
+	GLvoid reload();
+	bool is_reloading = false; // 재장전 중인지 여부
+	GLfloat gun_reload_angle = 0.0f; // 재장전 애니메이션 각도
+	GLfloat gun_reload_speed = 1.0f; // 재장전 애니메이션 속도
+
 
 	// 1인칭 카메라 관련 함수
 	GLvoid handleMouseMovement(float deltaX, float deltaY);

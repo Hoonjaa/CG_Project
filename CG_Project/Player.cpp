@@ -1,5 +1,22 @@
 #include "Player.h"
 
+GLvoid Player::reload() {
+	if (is_reloading) {
+		gun_reload_angle += gun_reload_speed;
+		if (gun_reload_angle >= 40.0f) {
+			gun_reload_angle = 40.0f;
+			gun_reload_speed = -gun_reload_speed;
+		}
+		if (gun_reload_angle <= -0.01f) {
+			gun_reload_angle = 0.0f;
+			gun_reload_speed = -gun_reload_speed;
+			canFire = true; // 재장전 완료 후 발사 가능
+			bulletCount = 30; // 총알 채우기
+			is_reloading = false; // 재장전 종료
+		}
+	}
+}
+
 glm::vec3 Player::getFireDirection() const
 {
 	if (player_body && player_body->getObject()) {
@@ -119,6 +136,7 @@ GLvoid Player::updateGunRotation() {
 		// 총의 로컬 변환 초기화 (이전 회전 제거)
 		player_body->setTransform(glm::mat4(1.0f));
 		gun_body->setTransform(glm::mat4(1.0f));
+		gun_magazine->setTransform(glm::mat4(1.0f));
 
 		// Yaw 회전 (Y축 중심으로 좌우 회전)
 		player_body->translate(glm::vec3(0.0f, 1.0f, 0.0f));
@@ -127,8 +145,13 @@ GLvoid Player::updateGunRotation() {
 		// Pitch 회전 (X축 중심으로 상하 회전)
 		gun_body->translate(glm::vec3(-0.3f, 0.45f, 0.7f));
 		gun_body->translate(glm::vec3(0.0f, 0.0f, -0.7f));
-		gun_body->rotate(currentPitch, glm::vec3(-1.0f, 0.0f, 0.0f));
+		gun_body->rotate(currentPitch + glm::radians(gun_reload_angle), glm::vec3(-1.0f, 0.0f, 0.0f));
 		gun_body->translate(glm::vec3(0.0f, 0.0f, 0.7f));
+
+		gun_magazine->translate(glm::vec3(0.0f, -0.3f, -0.025f));
+		gun_magazine->translate(glm::vec3(0.0f, 0.0f, -0.6f));
+		gun_magazine->rotate(glm::radians(gun_reload_angle) * 2, glm::vec3(1.0f, 0.0f, 0.0f));
+		gun_magazine->translate(glm::vec3(0.0f, 0.0f, 0.6f));
 	}
 }
 

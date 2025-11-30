@@ -392,6 +392,11 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 	case 'd':
 		key_d = true;
 		break;
+	case 'r':
+		if (player) {
+			player->is_reloading = true;
+		}
+		break;
 	}
 	glutPostRedisplay();
 }
@@ -426,6 +431,7 @@ GLvoid TimerFunction(int value)
 {
 	if (player) {
 		player->processMovement(key_w, key_a, key_s, key_d);
+		player->reload();
 	}
 	for (int i = bullets.size() - 1; i >= 0; i--) {
 		if (bullets[i]) {
