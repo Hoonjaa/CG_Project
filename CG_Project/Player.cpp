@@ -122,7 +122,22 @@ GLvoid Player::render(const glm::mat4& viewProjectionMatrix) {
 	}
 
 	if (root) {
-		root->render(viewProjectionMatrix);
+		setViewProjMatrixRecursive(root, viewProjectionMatrix);
+		root->render(glm::mat4(1.0f));
+		
+	}
+}
+
+GLvoid Player::setViewProjMatrixRecursive(std::shared_ptr<TreeNode> node, const glm::mat4& viewProjMatrix) {
+	// Object_Part로 캐스팅 시도
+	auto objPart = std::dynamic_pointer_cast<Object_Part>(node);
+	if (objPart) {
+		objPart->setViewProjMatrix(viewProjMatrix);
+	}
+
+	// 모든 자식 노드에 대해 재귀 호출
+	for (const auto& child : node->getChildren()) {
+		setViewProjMatrixRecursive(child, viewProjMatrix);
 	}
 }
 

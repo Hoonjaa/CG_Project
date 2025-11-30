@@ -199,14 +199,11 @@ GLvoid drawScene()														//--- 콜백 함수: 그리기 콜백 함수
 	// 일단은 단위 행렬로 설정해야 해서 이렇게 둘거임
 	// 추후에 객체의 draw함수에서 별도로 설정해줄 것
 	// 설정이 끝나면 아래 3줄 코드는 삭제해도 무방함.
-	glm::mat4 model = glm::mat4(1.0f);
-	unsigned int modelLocation = glGetUniformLocation(shaderProgramID, "model");
-	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model));
 
 
 	// 조명 관련 uniform 변수들 설정
 	unsigned int lightPosLocation = glGetUniformLocation(shaderProgramID, "lightPos"); //--- lightPos 값 전달: (0.0, 0.0, 5.0);
-	glUniform3f(lightPosLocation, 0.0f, 5.0f, 0.0f);
+	glUniform3f(lightPosLocation, 5.0f, 10.0f, 5.0f);
 	unsigned int lightColorLocation = glGetUniformLocation(shaderProgramID, "lightColor"); //--- lightColor 값 전달: (1.0, 1.0, 1.0) 백색
 	glUniform3f(lightColorLocation, 1.0f, 1.0f, 1.0f);
 

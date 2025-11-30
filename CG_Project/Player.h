@@ -23,6 +23,7 @@ private:
 
 	// 총 회전 업데이트를 위한 private 메서드
 	GLvoid updateGunRotation();
+	GLvoid setViewProjMatrixRecursive(std::shared_ptr<TreeNode> node, const glm::mat4& viewProjMatrix);
 
 public:
 	// 총알 관련 변수

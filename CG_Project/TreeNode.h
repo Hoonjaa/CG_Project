@@ -49,4 +49,8 @@ public:
 			child->render(worldTransform);
 		}
 	}
+
+	const std::vector<std::shared_ptr<TreeNode>>& getChildren() const {
+		return children;
+	}
 };
