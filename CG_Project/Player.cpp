@@ -112,14 +112,23 @@ GLvoid Player::render(const glm::mat4& viewProjectionMatrix) {
 GLvoid Player::updateGunRotation() {
 	auto playerBodyObj = std::dynamic_pointer_cast<Player_body>(player_body->getObject());
 	if (playerBodyObj) {
-		// 현재 yaw 값을 가져와서 총 회전 적용
+		// 현재 yaw와 pitch 값을 가져와서 총 회전 적용
 		float currentYaw = playerBodyObj->yaw;
+		float currentPitch = playerBodyObj->pitch;
 
 		// 총의 로컬 변환 초기화 (이전 회전 제거)
 		player_body->setTransform(glm::mat4(1.0f));
+		gun_body->setTransform(glm::mat4(1.0f));
 
-		player_body->translate(glm::vec3(-0.3f, 0.45f, 0.7f));
+		// Yaw 회전 (Y축 중심으로 좌우 회전)
+		player_body->translate(glm::vec3(0.0f, 1.0f, 0.0f));
 		player_body->rotate(currentYaw - glm::radians(90.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+
+		// Pitch 회전 (X축 중심으로 상하 회전)
+		gun_body->translate(glm::vec3(-0.3f, 0.45f, 0.7f));
+		gun_body->translate(glm::vec3(0.0f, 0.0f, -0.7f));
+		gun_body->rotate(currentPitch, glm::vec3(-1.0f, 0.0f, 0.0f));
+		gun_body->translate(glm::vec3(0.0f, 0.0f, 0.7f));
 	}
 }
 
