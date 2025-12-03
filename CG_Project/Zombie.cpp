@@ -6,37 +6,37 @@ GLvoid Zombie::setup(GLuint shader) {
 	//몸체 생성
 	auto body = std::make_shared<Zombie_body>();
 	bodyPart = std::make_shared<Object_Part>(body, shader);
-	bodyPart->translate(glm::vec3(0.0f, 2.0f, 0.0f));
+	bodyPart->translate(glm::vec3(0.0f, 1.25f, 0.0f));
 	root->addChild(bodyPart);
 
 	//오른팔 생성
 	auto Rarm = std::make_shared<Zombie_arm>();
 	RightArmPart = std::make_shared<Object_Part>(Rarm, shader);
-	RightArmPart->translate(glm::vec3(-0.5f, 0.1f, 0.0f));
+	RightArmPart->translate(glm::vec3(-0.3125f, 0.0625f, 0.0f));
 	bodyPart->addChild(RightArmPart);
 
 	//왼팔 생성
 	auto Larm = std::make_shared<Zombie_arm>();
 	LeftArmPart = std::make_shared<Object_Part>(Larm, shader);
-	LeftArmPart->translate(glm::vec3(0.5f, 0.1f, 0.0f));
+	LeftArmPart->translate(glm::vec3(0.3125f, 0.0625f, 0.0f));
 	bodyPart->addChild(LeftArmPart);
 
 	//오른다리 생성
 	auto Rleg = std::make_shared<Zombie_arm>();
 	RightLegPart = std::make_shared<Object_Part>(Rleg, shader);
-	RightLegPart->translate(glm::vec3(-0.2f, -1.1f, 0.0f));
+	RightLegPart->translate(glm::vec3(-0.125f, -0.6875f, 0.0f));
 	bodyPart->addChild(RightLegPart);
 
 	//왼다리 생성
 	auto Lleg = std::make_shared<Zombie_arm>();
 	LeftLegPart = std::make_shared<Object_Part>(Lleg, shader);
-	LeftLegPart->translate(glm::vec3(0.2f, -1.1f, 0.0f));
+	LeftLegPart->translate(glm::vec3(0.125f, -0.6875f, 0.0f));
 	bodyPart->addChild(LeftLegPart);
 
 	//머리 생성
 	auto head = std::make_shared<Zombie_head>();
 	headPart = std::make_shared<Object_Part>(head, shader);
-	headPart->translate(glm::vec3(0.0f, 0.9f, 0.0f));
+	headPart->translate(glm::vec3(0.0f, 0.5625f, 0.0f));
 	bodyPart->addChild(headPart);
 
 	// 추가: 초기 회전 각도를 목표 지점을 향하도록 설정
@@ -117,8 +117,8 @@ GLvoid Zombie::Walk(const glm::vec3 PlayerPos) {
 
 	// 오른팔 - 상단(어깨) 기준 회전
 	if (RightArmPart) {
-		glm::vec3 rightArmPos(-0.5f, 0.1f, 0.0f);
-		glm::vec3 pivotOffset(0.0f, 0.5f, 0.0f); // 팔 길이의 절반만큼 위로 (상단)
+		glm::vec3 rightArmPos(-0.3125f, 0.0625f, 0.0f);
+		glm::vec3 pivotOffset(0.0f, 0.3125f, 0.0f); // 팔 길이의 절반만큼 위로 (상단)
 
 		RightArmPart->setTransform(glm::mat4(1.0f));
 		RightArmPart->translate(rightArmPos);
@@ -129,8 +129,8 @@ GLvoid Zombie::Walk(const glm::vec3 PlayerPos) {
 
 	// 왼팔 - 상단(어깨) 기준 회전
 	if (LeftArmPart) {
-		glm::vec3 leftArmPos(0.5f, 0.1f, 0.0f);
-		glm::vec3 pivotOffset(0.0f, 0.5f, 0.0f);
+		glm::vec3 leftArmPos(0.3125f, 0.0625f, 0.0f);
+		glm::vec3 pivotOffset(0.0f, 0.3125f, 0.0f);
 
 		LeftArmPart->setTransform(glm::mat4(1.0f));
 		LeftArmPart->translate(leftArmPos);
@@ -141,8 +141,8 @@ GLvoid Zombie::Walk(const glm::vec3 PlayerPos) {
 
 	// 오른다리 - 상단(골반) 기준 회전
 	if (RightLegPart) {
-		glm::vec3 rightLegPos(-0.2f, -1.1f, 0.0f);
-		glm::vec3 pivotOffset(0.0f, 0.5f, 0.0f); // 다리 길이의 절반만큼 위로 (상단)
+		glm::vec3 rightLegPos(-0.125f, -0.6875f, 0.0f);
+		glm::vec3 pivotOffset(0.0f, 0.3125f, 0.0f); // 다리 길이의 절반만큼 위로 (상단)
 
 		RightLegPart->setTransform(glm::mat4(1.0f));
 		RightLegPart->translate(rightLegPos);
@@ -153,8 +153,8 @@ GLvoid Zombie::Walk(const glm::vec3 PlayerPos) {
 
 	// 왼다리 - 상단(골반) 기준 회전
 	if (LeftLegPart) {
-		glm::vec3 leftLegPos(0.2f, -1.1f, 0.0f);
-		glm::vec3 pivotOffset(0.0f, 0.5f, 0.0f);
+		glm::vec3 leftLegPos(0.125f, -0.6875f, 0.0f);
+		glm::vec3 pivotOffset(0.0f, 0.3125f, 0.0f);
 
 		LeftLegPart->setTransform(glm::mat4(1.0f));
 		LeftLegPart->translate(leftLegPos);
@@ -169,28 +169,28 @@ GLvoid Zombie::resetMotion() {
 	this->limb_forward = true;
 
 	if (RightArmPart) {
-		glm::vec3 rightArmPos(-0.5f, 0.1f, 0.0f);
+		glm::vec3 rightArmPos(-0.3125f, 0.0625f, 0.0f);
 		RightArmPart->setTransform(glm::mat4(1.0f));
 		RightArmPart->translate(rightArmPos);
 	}
 
 	// 왼팔 초기 위치로 복원
 	if (LeftArmPart) {
-		glm::vec3 leftArmPos(0.5f, 0.1f, 0.0f);
+		glm::vec3 leftArmPos(0.3125f, 0.0625f, 0.0f);
 		LeftArmPart->setTransform(glm::mat4(1.0f));
 		LeftArmPart->translate(leftArmPos);
 	}
 
 	// 오른다리 초기 위치로 복원
 	if (RightLegPart) {
-		glm::vec3 rightLegPos(-0.2f, -1.1f, 0.0f);
+		glm::vec3 rightLegPos(-0.125f, -0.6875f, 0.0f);
 		RightLegPart->setTransform(glm::mat4(1.0f));
 		RightLegPart->translate(rightLegPos);
 	}
 
 	// 왼다리 초기 위치로 복원
 	if (LeftLegPart) {
-		glm::vec3 leftLegPos(0.2f, -1.1f, 0.0f);
+		glm::vec3 leftLegPos(0.125f, -0.6875f, 0.0f);
 		LeftLegPart->setTransform(glm::mat4(1.0f));
 		LeftLegPart->translate(leftLegPos);
 	}
