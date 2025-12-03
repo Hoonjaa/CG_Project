@@ -1,9 +1,11 @@
 #include "pch.h"
+#include "Random.h"
 #include "Player.h"
 #include "Cube.h"
 #include "Bullet.h"
 #include "Room.h"
 #include "Ground.h"
+#include "Zombie.h"
 
 //--- 아래 5개 함수는 사용자 정의 함수임
 void make_vertexShaders();
@@ -30,7 +32,8 @@ glm::mat4 getViewPerspectiveMatrix();
 glm::mat4 getThirdPersonViewMatrix();
 // 변환 행렬 업데이트
 GLvoid updateTransformMatrix();
-
+// 좀비 생성 함수
+GLvoid spawnZombie();
 
 
 
@@ -56,6 +59,11 @@ int centerX = 400, centerY = 400; // 화면 중앙 좌표
 bool firstMouse = true;
 bool mouseWarped = false; // 마우스가 강제로 이동했는지 체크하는 플래그
 
+// 좀비 생성 관련 변수
+int frameCount = 0;                    // 프레임 카운터
+const int SPAWN_INTERVAL = 180;        // 스폰 간격 (180프레임 = 약 3초, 60fps 기준)
+const int MAX_ZOMBIES = 20;            // 최대 좀비 수
+
 //Cube* cube = nullptr; 예시임 포인터로 객체 선언
 // 포인터로 하는 이유는 셰이더가 만들어지는 등 기본 세팅 코드가 먼저 작동해야 객체 생성가능
 // 따라서 main 함수 안에서 new로 객체 생성
@@ -64,6 +72,7 @@ Cube* cube = nullptr;
 Room* room = nullptr;
 Ground* ground = nullptr;
 std::vector<Bullet*> bullets;
+std::vector<Zombie*> zombies;
 
 char* filetobuf(const char* file)
 {
@@ -251,6 +260,12 @@ GLvoid drawScene()														//--- 콜백 함수: 그리기 콜백 함수
 		}
 	}
 
+	for (auto zombie : zombies) {
+		if (zombie) {
+			zombie->render(viewProjectionMatrix);
+		}
+	}
+
 	glutSwapBuffers();													// 화면에 출력하기
 }
 //--- 다시그리기 콜백 함수
@@ -434,6 +449,24 @@ GLvoid SpecialKeyboard(int key, int x, int y)
 
 GLvoid TimerFunction(int value)
 {
+	//좀비
+	// 프레임 카운터 증가
+	frameCount++;
+
+	// 일정 간격마다 새로운 좀비 생성
+	if (frameCount >= SPAWN_INTERVAL) {
+		spawnZombie();
+		frameCount = 0;  // 카운터 리셋
+	}
+
+	// 모든 좀비 업데이트
+	for (auto zombie : zombies) {
+		if (zombie) {
+			zombie->Walk(player->getPosition());
+		}
+	}
+
+	//플레이어
 	if (player) {
 		player->processMovement(key_w, key_a, key_s, key_d);
 		player->reload();
@@ -493,4 +526,18 @@ glm::mat4 getThirdPersonViewMatrix() {
 	glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
 
 	return glm::lookAt(eye, center, up);
+}
+
+GLvoid spawnZombie() {
+	if (zombies.size() >= MAX_ZOMBIES) {
+		return;  // 최대 좀비 수에 도달하면 생성하지 않음
+	}
+
+	glm::vec3 randomPos = getRandomZombieSpawnPosition();
+	Zombie* newZombie = new Zombie(randomPos);
+	newZombie->setup(shaderProgramID);
+	zombies.push_back(newZombie);
+
+	std::cout << "좀비 생성, 위치: (" << randomPos.x << ", " << randomPos.y << ", " << randomPos.z
+		<< "), 현재 좀비 수: " << zombies.size() << std::endl;
 }

@@ -81,6 +81,21 @@
     <ClCompile Include="Ground.cpp">
       <Filter>소스 파일\객체\땅</Filter>
     </ClCompile>
+    <ClCompile Include="Zombie_arm.cpp">
+      <Filter>소스 파일\객체\좀비</Filter>
+    </ClCompile>
+    <ClCompile Include="Zombie_body.cpp">
+      <Filter>소스 파일\객체\좀비</Filter>
+    </ClCompile>
+    <ClCompile Include="Zombie_head.cpp">
+      <Filter>소스 파일\객체\좀비</Filter>
+    </ClCompile>
+    <ClCompile Include="Zombie_leg.cpp">
+      <Filter>소스 파일\객체\좀비</Filter>
+    </ClCompile>
+    <ClCompile Include="Zombie.cpp">
+      <Filter>소스 파일\객체\좀비</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -127,6 +142,24 @@
     </ClInclude>
     <ClInclude Include="Ground.h">
       <Filter>소스 파일\객체\땅</Filter>
+    </ClInclude>
+    <ClInclude Include="Zombie_arm.h">
+      <Filter>소스 파일\객체\좀비</Filter>
+    </ClInclude>
+    <ClInclude Include="Zombie_body.h">
+      <Filter>소스 파일\객체\좀비</Filter>
+    </ClInclude>
+    <ClInclude Include="Zombie_head.h">
+      <Filter>소스 파일\객체\좀비</Filter>
+    </ClInclude>
+    <ClInclude Include="Zombie_leg.h">
+      <Filter>소스 파일\객체\좀비</Filter>
+    </ClInclude>
+    <ClInclude Include="Zombie.h">
+      <Filter>소스 파일\객체\좀비</Filter>
+    </ClInclude>
+    <ClInclude Include="Random.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

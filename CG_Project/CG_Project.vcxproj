@@ -138,6 +138,11 @@
     <ClCompile Include="Player_body.cpp" />
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="Room.cpp" />
+    <ClCompile Include="Zombie.cpp" />
+    <ClCompile Include="Zombie_arm.cpp" />
+    <ClCompile Include="Zombie_body.cpp" />
+    <ClCompile Include="Zombie_head.cpp" />
+    <ClCompile Include="Zombie_leg.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bullet.h" />
@@ -153,8 +158,14 @@
     <ClInclude Include="Object_part.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Player_body.h" />
+    <ClInclude Include="Random.h" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="TreeNode.h" />
+    <ClInclude Include="Zombie.h" />
+    <ClInclude Include="Zombie_arm.h" />
+    <ClInclude Include="Zombie_body.h" />
+    <ClInclude Include="Zombie_head.h" />
+    <ClInclude Include="Zombie_leg.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="fragment.glsl" />
