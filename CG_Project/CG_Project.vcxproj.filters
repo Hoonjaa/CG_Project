@@ -28,6 +28,15 @@
     <Filter Include="소스 파일\객체\총알">
       <UniqueIdentifier>{90f16751-77ca-4773-9d89-1c5c4c6ee5c5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\객체\좀비">
+      <UniqueIdentifier>{cd9b2495-f633-4295-a3aa-231d7c3179ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\객체\룸">
+      <UniqueIdentifier>{7ada1ca0-0da1-44a0-bb4e-d879f5dbf5f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\객체\땅">
+      <UniqueIdentifier>{58357be8-f607-4cc9-8669-ef8c1120cef2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -65,6 +74,12 @@
     </ClCompile>
     <ClCompile Include="Bullet.cpp">
       <Filter>소스 파일\객체\총알</Filter>
+    </ClCompile>
+    <ClCompile Include="Room.cpp">
+      <Filter>소스 파일\객체\룸</Filter>
+    </ClCompile>
+    <ClCompile Include="Ground.cpp">
+      <Filter>소스 파일\객체\땅</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -106,6 +121,12 @@
     </ClInclude>
     <ClInclude Include="Bullet.h">
       <Filter>소스 파일\객체\총알</Filter>
+    </ClInclude>
+    <ClInclude Include="Room.h">
+      <Filter>소스 파일\객체\룸</Filter>
+    </ClInclude>
+    <ClInclude Include="Ground.h">
+      <Filter>소스 파일\객체\땅</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

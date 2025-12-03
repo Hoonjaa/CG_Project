@@ -2,6 +2,8 @@
 #include "Player.h"
 #include "Cube.h"
 #include "Bullet.h"
+#include "Room.h"
+#include "Ground.h"
 
 //--- 아래 5개 함수는 사용자 정의 함수임
 void make_vertexShaders();
@@ -59,6 +61,8 @@ bool mouseWarped = false; // 마우스가 강제로 이동했는지 체크하는 플래그
 // 따라서 main 함수 안에서 new로 객체 생성
 Player* player = nullptr;
 Cube* cube = nullptr;
+Room* room = nullptr;
+Ground* ground = nullptr;
 std::vector<Bullet*> bullets;
 
 char* filetobuf(const char* file)
@@ -105,6 +109,8 @@ void main(int argc, char** argv)										//--- 윈도우 출력하고 콜백함수 설정
 	player = new Player();
 	player->setup(shaderProgramID);
 	cube = new Cube();
+	room = new Room();
+	ground = new Ground();
 
 
 	glutTimerFunc(16, TimerFunction, 1);
@@ -236,6 +242,8 @@ GLvoid drawScene()														//--- 콜백 함수: 그리기 콜백 함수
 
 	player->render(viewProjectionMatrix);
 	cube->draw(shaderProgramID, glm::mat4(1.0f), viewProjectionMatrix);
+	room->draw(shaderProgramID, glm::mat4(1.0f), viewProjectionMatrix);
+	ground->draw(shaderProgramID, glm::mat4(1.0f), viewProjectionMatrix);
 
 	for (auto* bullet : bullets) {
 		if (bullet) {

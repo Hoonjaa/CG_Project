@@ -125,6 +125,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="Ground.cpp" />
     <ClCompile Include="Gun_barrel.cpp" />
     <ClCompile Include="Gun_body.cpp" />
     <ClCompile Include="Gun_cover.cpp" />
@@ -136,10 +137,12 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Player_body.cpp" />
     <ClCompile Include="Random.cpp" />
+    <ClCompile Include="Room.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Cube.h" />
+    <ClInclude Include="Ground.h" />
     <ClInclude Include="Gun_barrel.h" />
     <ClInclude Include="Gun_body.h" />
     <ClInclude Include="Gun_cover.h" />
@@ -150,6 +153,7 @@
     <ClInclude Include="Object_part.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Player_body.h" />
+    <ClInclude Include="Room.h" />
     <ClInclude Include="TreeNode.h" />
   </ItemGroup>
   <ItemGroup>
