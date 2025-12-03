@@ -4,7 +4,7 @@ Bullet::Bullet(const glm::vec3& startPos, const glm::vec3& dir)
 {
 	vPos = startPos;
 	direction = glm::normalize(dir);
-	vColor = glm::vec3(1.0f, 0.0f, 0.0f);
+	vColor = glm::vec3(1.0f, 0.3f, 0.0f);
 
 	setVertexInfo();
 	// VBO: 정점 데이터
