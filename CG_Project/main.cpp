@@ -6,6 +6,7 @@
 #include "Room.h"
 #include "Ground.h"
 #include "Zombie.h"
+#include "Minimap.h"
 
 //--- 아래 5개 함수는 사용자 정의 함수임
 void make_vertexShaders();
@@ -34,6 +35,8 @@ glm::mat4 getThirdPersonViewMatrix();
 GLvoid updateTransformMatrix();
 // 좀비 생성 함수
 GLvoid spawnZombie();
+// 텍스트 렌더링 함수
+GLvoid renderText(float x, float y, const char* text);
 
 
 
@@ -73,6 +76,7 @@ Room* room = nullptr;
 Ground* ground = nullptr;
 std::vector<Bullet*> bullets;
 std::vector<Zombie*> zombies;
+Minimap* minimap = nullptr;
 
 char* filetobuf(const char* file)
 {
@@ -120,6 +124,8 @@ void main(int argc, char** argv)										//--- 윈도우 출력하고 콜백함수 설정
 	cube = new Cube();
 	room = new Room();
 	ground = new Ground();
+	minimap = new Minimap(shaderProgramID);
+	minimap->setWorldSize(40.0f);
 
 
 	glutTimerFunc(16, TimerFunction, 1);
@@ -266,7 +272,101 @@ GLvoid drawScene()														//--- 콜백 함수: 그리기 콜백 함수
 		}
 	}
 
-	glutSwapBuffers();													// 화면에 출력하기
+	if (minimap) {
+		minimap->render(player->getPosition(), zombies);
+	}
+
+	// ============= UI 렌더링 시작 =============
+	// 셰이더 프로그램 비활성화
+	glUseProgram(0);
+	
+	// 투영 및 모델뷰 행렬을 2D 모드로 전환
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	gluOrtho2D(0, WindowWidth, 0, WindowHeight);
+
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+
+	// 깊이 테스트 비활성화
+	glDisable(GL_DEPTH_TEST);
+
+	// 탄약 정보 배경 박스
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	
+	glColor4f(0.0f, 0.0f, 0.0f, 0.7f); // 반투명 검은색 배경
+	glBegin(GL_QUADS);
+		glVertex2f(WindowWidth - 170, 15);
+		glVertex2f(WindowWidth - 10, 15);
+		glVertex2f(WindowWidth - 10, player && player->is_reloading ? 85 : 55);
+		glVertex2f(WindowWidth - 170, player && player->is_reloading ? 85 : 55);
+	glEnd();
+	
+	glDisable(GL_BLEND);
+
+	// 탄약 정보 표시
+	if (player) {
+		char ammoText[50];
+		sprintf_s(ammoText, "Ammo: %d / 30", player->bulletCount);
+
+		// 텍스트 색상 (밝은 녹색)
+		glColor3f(0.0f, 1.0f, 0.0f);
+		
+		glRasterPos2f(WindowWidth - 155, 30);
+		for (char* c = ammoText; *c != '\0'; c++) {
+			glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *c);
+		}
+
+		// 재장전 중이면 표시
+		if (player->is_reloading) {
+			glColor3f(1.0f, 1.0f, 0.0f); // 노란색
+			glRasterPos2f(WindowWidth - 155, 60);
+			const char* reloadText = "Reloading...";
+			for (const char* c = reloadText; *c != '\0'; c++) {
+				glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *c);
+			}
+		}
+	}
+
+	// 좀비 수 배경 박스
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	
+	glColor4f(0.0f, 0.0f, 0.0f, 0.7f);
+	glBegin(GL_QUADS);
+		glVertex2f(WindowWidth - 160, WindowHeight - 50);
+		glVertex2f(WindowWidth - 10, WindowHeight - 50);
+		glVertex2f(WindowWidth - 10, WindowHeight - 10);
+		glVertex2f(WindowWidth - 160, WindowHeight - 10);
+	glEnd();
+	
+	glDisable(GL_BLEND);
+
+	// 좀비 수 표시
+	char zombieText[50];
+	sprintf_s(zombieText, "Zombies: %d / %d", (int)zombies.size(), MAX_ZOMBIES);
+	glColor3f(1.0f, 0.0f, 0.0f); // 빨간색
+	glRasterPos2f(WindowWidth - 150, WindowHeight - 30);
+	for (char* c = zombieText; *c != '\0'; c++) {
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *c);
+	}
+
+	// 깊이 테스트 다시 활성화
+	glEnable(GL_DEPTH_TEST);
+
+	// 행렬 복원
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
+	
+	// 셰이더 프로그램 다시 활성화
+	glUseProgram(shaderProgramID);
+
+	glutSwapBuffers();
 }
 //--- 다시그리기 콜백 함수
 GLvoid Reshape(int w, int h)											//--- 콜백 함수: 다시 그리기 콜백 함수
@@ -292,6 +392,7 @@ GLvoid Motion(int x, int y) {
 
 	// 1인칭 모드에서만 처리
 	if (player && player->isFirstPersonMode()) {
+
 		float deltaX = x - centerX;
 		float deltaY = y - centerY;
 
@@ -394,6 +495,7 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 			player->toggleViewMode();
 			// 1인칭 모드로 전환할 때 마우스를 중앙에 위치
 			if (player->isFirstPersonMode()) {
+				glutSetCursor(GLUT_CURSOR_CROSSHAIR);
 				glutWarpPointer(centerX, centerY);
 				firstMouse = true;
 				mouseWarped = true;

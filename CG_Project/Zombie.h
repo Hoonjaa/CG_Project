@@ -47,5 +47,7 @@ public:
 	GLvoid resetMotion();
 
 	GLvoid reset();
+
+	glm::vec3 getPosition() const { return position; }
 };
 
