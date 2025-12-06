@@ -37,6 +37,8 @@ GLvoid updateTransformMatrix();
 GLvoid spawnZombie();
 // 텍스트 렌더링 함수
 GLvoid renderText(float x, float y, const char* text);
+// 1인칭/3인칭 전환 함수
+GLvoid toggleViewMode();
 
 
 
@@ -128,6 +130,7 @@ void main(int argc, char** argv)										//--- 윈도우 출력하고 콜백함수 설정
 	minimap->setWorldSize(40.0f);
 
 
+	toggleViewMode(); // 초기 뷰 모드 설정
 	glutTimerFunc(16, TimerFunction, 1);
 	setViewPerspectiveMatrix();
 	glutDisplayFunc(drawScene);											//--- 출력 콜백 함수
@@ -514,16 +517,16 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 			glEnable(GL_CULL_FACE);
 		break;
 	case 'c':
-		if (player) {
-			player->toggleViewMode();
-			// 1인칭 모드로 전환할 때 마우스를 중앙에 위치
-			if (player->isFirstPersonMode()) {
-				glutSetCursor(GLUT_CURSOR_CROSSHAIR);
-				glutWarpPointer(centerX, centerY);
-				firstMouse = true;
-				mouseWarped = true;
-			}
-		}
+		//if (player) {
+		//	player->toggleViewMode();
+		//	// 1인칭 모드로 전환할 때 마우스를 중앙에 위치
+		//	if (player->isFirstPersonMode()) {
+		//		glutSetCursor(GLUT_CURSOR_CROSSHAIR);
+		//		glutWarpPointer(centerX, centerY);
+		//		firstMouse = true;
+		//		mouseWarped = true;
+		//	}
+		//}
 		break;
 	case 'w':
 		key_w = true;
@@ -696,4 +699,17 @@ GLvoid spawnZombie() {
 
 	std::cout << "좀비 생성, 위치: (" << randomPos.x << ", " << randomPos.y << ", " << randomPos.z
 		<< "), 현재 좀비 수: " << zombies.size() << std::endl;
+}
+
+GLvoid toggleViewMode() {
+	if (player) {
+		player->toggleViewMode();
+		// 1인칭 모드로 전환할 때 마우스를 중앙에 위치
+		if (player->isFirstPersonMode()) {
+			glutSetCursor(GLUT_CURSOR_CROSSHAIR);
+			glutWarpPointer(centerX, centerY);
+			firstMouse = true;
+			mouseWarped = true;
+		}
+	}
 }
