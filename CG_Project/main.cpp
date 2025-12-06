@@ -58,7 +58,7 @@ bool key_s = false;
 bool key_d = false;
 
 // 플레이어 바라보는 방향 관련 변수
-int centerX = 400, centerY = 400; // 화면 중앙 좌표
+int centerX = 410, centerY = 400; // 화면 중앙 좌표
 bool firstMouse = true;
 bool mouseWarped = false; // 마우스가 강제로 이동했는지 체크하는 플래그
 
@@ -397,7 +397,7 @@ GLvoid Reshape(int w, int h)											//--- 콜백 함수: 다시 그리기 콜백 함수
 	glViewport(0, 0, w, h);
 	WindowWidth = w;
 	WindowHeight = h;
-	centerX = w / 2;
+	centerX = w / 2 + 10;
 	centerY = h / 2;
 }
 
