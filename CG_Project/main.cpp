@@ -272,6 +272,29 @@ GLvoid drawScene()														//--- 콜백 함수: 그리기 콜백 함수
 		}
 	}
 
+	// 디버그: 바운딩 박스 그리기
+	glUseProgram(0); // 셰이더 비활성화
+	glMatrixMode(GL_PROJECTION);
+	glLoadMatrixf(glm::value_ptr(projection));
+	glMatrixMode(GL_MODELVIEW);
+	glLoadMatrixf(glm::value_ptr(viewMatrix));
+	
+	// 좀비 바운딩 박스
+	for (auto zombie : zombies) {
+		if (zombie) {
+			zombie->get_bb().drawDebug();
+		}
+	}
+	
+	// 총알 바운딩 박스
+	for (auto* bullet : bullets) {
+		if (bullet) {
+			bullet->get_bb().drawDebug();
+		}
+	}
+	
+	glUseProgram(shaderProgramID); // 셰이더 다시 활성화
+
 	if (minimap) {
 		minimap->render(player->getPosition(), zombies);
 	}
@@ -573,6 +596,8 @@ GLvoid TimerFunction(int value)
 		player->processMovement(key_w, key_a, key_s, key_d);
 		player->reload();
 	}
+	
+	// 총알 업데이트 및 충돌 체크
 	for (int i = bullets.size() - 1; i >= 0; i--) {
 		if (bullets[i]) {
 			bullets[i]->update();
@@ -581,9 +606,38 @@ GLvoid TimerFunction(int value)
 			if (bullets[i]->Destroy()) {
 				delete bullets[i];
 				bullets.erase(bullets.begin() + i);
+				continue;
+			}
+			
+			// 총알과 좀비의 충돌 체크
+			bool bulletHit = false;
+			BoundingBox bulletBB = bullets[i]->get_bb();
+			
+			for (int j = zombies.size() - 1; j >= 0; j--) {
+				if (zombies[j]) {
+					BoundingBox zombieBB = zombies[j]->get_bb();
+					
+					
+					if (bulletBB.intersects(zombieBB)) {
+						std::cout << "=== 충돌 감지! ===" << std::endl;
+						// 충돌 발생 - 좀비 삭제
+						delete zombies[j];
+						zombies.erase(zombies.begin() + j);
+						bulletHit = true;
+						std::cout << "좀비 처치! 남은 좀비 수: " << zombies.size() << std::endl;
+						break;
+					}
+				}
+			}
+			
+			// 충돌한 총알 삭제
+			if (bulletHit) {
+				delete bullets[i];
+				bullets.erase(bullets.begin() + i);
 			}
 		}
 	}
+	
 	glutPostRedisplay();
 	if (Timer) {
 		glutTimerFunc(16, TimerFunction, 1);

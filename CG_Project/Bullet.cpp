@@ -5,6 +5,9 @@ Bullet::Bullet(const glm::vec3& startPos, const glm::vec3& dir)
 	vPos = startPos;
 	direction = glm::normalize(dir);
 	vColor = glm::vec3(1.0f, 0.3f, 0.0f);
+	
+	// modelMatrix를 시작 위치로 초기화
+	modelMatrix = glm::translate(glm::mat4(1.0f), startPos);
 
 	setVertexInfo();
 	// VBO: 정점 데이터
@@ -55,7 +58,4 @@ GLvoid Bullet::update()
 
 	// 시간 업데이트
 	currentTime += (1.0f / 60.0f);
-
-	// 현재 위치 업데이트 (vPos는 getPosition()에서 사용하기 위해)
-	vPos = glm::vec3(modelMatrix[3][0], modelMatrix[3][1], modelMatrix[3][2]);
 }

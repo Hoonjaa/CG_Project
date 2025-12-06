@@ -6,6 +6,7 @@
 #include "Zombie_head.h"
 #include "Zombie_leg.h"
 #include "pch.h"
+#include "BoundingBox.h"
 
 class Zombie
 {
@@ -49,5 +50,13 @@ public:
 	GLvoid reset();
 
 	glm::vec3 getPosition() const { return position; }
+	
+	BoundingBox get_bb() const {
+		BoundingBox bb;
+		// 좀비의 대략적인 크기 (몸체 중심 기준)
+		bb.min = position + glm::vec3(-0.3f, 0.0f, -0.3f);
+		bb.max = position + glm::vec3(0.3f, 2.0f, 0.3f);
+		return bb;
+	}
 };
 

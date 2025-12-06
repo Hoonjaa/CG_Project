@@ -1,5 +1,7 @@
 #pragma once
 #include "Object.h"
+#include "BoundingBox.h"
+
 class Bullet : public Object
 {
 private:
@@ -8,40 +10,40 @@ private:
     GLvoid setVertexInfo() {
         GLfloat temp[9 * 24] = {
             // 앞면 (z = +0.5, normal = 0, 0, 1)
-            vPos.x + 0.025f, vPos.y + 0.025f, vPos.z + 0.025f,  vColor.r, vColor.g, vColor.b,  0.0f, 0.0f, 1.0f,
-            vPos.x - 0.025f, vPos.y + 0.025f, vPos.z + 0.025f,  vColor.r, vColor.g, vColor.b,  0.0f, 0.0f, 1.0f,
-            vPos.x - 0.025f, vPos.y - 0.025f, vPos.z + 0.025f,  vColor.r, vColor.g, vColor.b,  0.0f, 0.0f, 1.0f,
-            vPos.x + 0.025f, vPos.y - 0.025f, vPos.z + 0.025f,  vColor.r, vColor.g, vColor.b,  0.0f, 0.0f, 1.0f,
+            0.025f, 0.025f, 0.025f,  vColor.r, vColor.g, vColor.b,  0.0f, 0.0f, 1.0f,
+            -0.025f, 0.025f, 0.025f,  vColor.r, vColor.g, vColor.b,  0.0f, 0.0f, 1.0f,
+            -0.025f, -0.025f, 0.025f,  vColor.r, vColor.g, vColor.b,  0.0f, 0.0f, 1.0f,
+            0.025f, -0.025f, 0.025f,  vColor.r, vColor.g, vColor.b,  0.0f, 0.0f, 1.0f,
 
             // 왼쪽면 (x = -0.5, normal = -1, 0, 0)
-            vPos.x - 0.025f, vPos.y + 0.025f, vPos.z + 0.025f,  vColor.r, vColor.g, vColor.b,  -1.0f, 0.0f, 0.0f,
-            vPos.x - 0.025f, vPos.y + 0.025f, vPos.z - 0.025f,  vColor.r, vColor.g, vColor.b,  -1.0f, 0.0f, 0.0f,
-            vPos.x - 0.025f, vPos.y - 0.025f, vPos.z - 0.025f,  vColor.r, vColor.g, vColor.b,  -1.0f, 0.0f, 0.0f,
-            vPos.x - 0.025f, vPos.y - 0.025f, vPos.z + 0.025f,  vColor.r, vColor.g, vColor.b,  -1.0f, 0.0f, 0.0f,
+            -0.025f, 0.025f, 0.025f,  vColor.r, vColor.g, vColor.b,  -1.0f, 0.0f, 0.0f,
+            -0.025f, 0.025f, -0.025f,  vColor.r, vColor.g, vColor.b,  -1.0f, 0.0f, 0.0f,
+            -0.025f, -0.025f, -0.025f,  vColor.r, vColor.g, vColor.b,  -1.0f, 0.0f, 0.0f,
+            -0.025f, -0.025f, 0.025f,  vColor.r, vColor.g, vColor.b,  -1.0f, 0.0f, 0.0f,
 
             // 뒷면 (z = -0.5, normal = 0, 0, -1)
-            vPos.x - 0.025f, vPos.y + 0.025f, vPos.z - 0.025f,  vColor.r, vColor.g, vColor.b,  0.0f, 0.0f, -1.0f,
-            vPos.x + 0.025f, vPos.y + 0.025f, vPos.z - 0.025f,  vColor.r, vColor.g, vColor.b,  0.0f, 0.0f, -1.0f,
-            vPos.x + 0.025f, vPos.y - 0.025f, vPos.z - 0.025f,  vColor.r, vColor.g, vColor.b,  0.0f, 0.0f, -1.0f,
-            vPos.x - 0.025f, vPos.y - 0.025f, vPos.z - 0.025f,  vColor.r, vColor.g, vColor.b,  0.0f, 0.0f, -1.0f,
+            -0.025f, 0.025f, -0.025f,  vColor.r, vColor.g, vColor.b,  0.0f, 0.0f, -1.0f,
+            0.025f, 0.025f, -0.025f,  vColor.r, vColor.g, vColor.b,  0.0f, 0.0f, -1.0f,
+            0.025f, -0.025f, -0.025f,  vColor.r, vColor.g, vColor.b,  0.0f, 0.0f, -1.0f,
+            -0.025f, -0.025f, -0.025f,  vColor.r, vColor.g, vColor.b,  0.0f, 0.0f, -1.0f,
 
             // 오른쪽면 (x = +0.5, normal = 1, 0, 0)
-            vPos.x + 0.025f, vPos.y + 0.025f, vPos.z - 0.025f,  vColor.r, vColor.g, vColor.b,  1.0f, 0.0f, 0.0f,
-            vPos.x + 0.025f, vPos.y + 0.025f, vPos.z + 0.025f,  vColor.r, vColor.g, vColor.b,  1.0f, 0.0f, 0.0f,
-            vPos.x + 0.025f, vPos.y - 0.025f, vPos.z + 0.025f,  vColor.r, vColor.g, vColor.b,  1.0f, 0.0f, 0.0f,
-            vPos.x + 0.025f, vPos.y - 0.025f, vPos.z - 0.025f,  vColor.r, vColor.g, vColor.b,  1.0f, 0.0f, 0.0f,
+            0.025f, 0.025f, -0.025f,  vColor.r, vColor.g, vColor.b,  1.0f, 0.0f, 0.0f,
+            0.025f, 0.025f, 0.025f,  vColor.r, vColor.g, vColor.b,  1.0f, 0.0f, 0.0f,
+            0.025f, -0.025f, 0.025f,  vColor.r, vColor.g, vColor.b,  1.0f, 0.0f, 0.0f,
+            0.025f, -0.025f, -0.025f,  vColor.r, vColor.g, vColor.b,  1.0f, 0.0f, 0.0f,
 
             // 윗면 (y = +0.5, normal = 0, 1, 0)
-            vPos.x + 0.025f, vPos.y + 0.025f, vPos.z - 0.025f,  vColor.r, vColor.g, vColor.b,  0.0f, 1.0f, 0.0f,
-            vPos.x - 0.025f, vPos.y + 0.025f, vPos.z - 0.025f,  vColor.r, vColor.g, vColor.b,  0.0f, 1.0f, 0.0f,
-            vPos.x - 0.025f, vPos.y + 0.025f, vPos.z + 0.025f,  vColor.r, vColor.g, vColor.b,  0.0f, 1.0f, 0.0f,
-            vPos.x + 0.025f, vPos.y + 0.025f, vPos.z + 0.025f,  vColor.r, vColor.g, vColor.b,  0.0f, 1.0f, 0.0f,
+            0.025f, 0.025f, -0.025f,  vColor.r, vColor.g, vColor.b,  0.0f, 1.0f, 0.0f,
+            -0.025f, 0.025f, -0.025f,  vColor.r, vColor.g, vColor.b,  0.0f, 1.0f, 0.0f,
+            -0.025f, 0.025f, 0.025f,  vColor.r, vColor.g, vColor.b,  0.0f, 1.0f, 0.0f,
+            0.025f, 0.025f, 0.025f,  vColor.r, vColor.g, vColor.b,  0.0f, 1.0f, 0.0f,
 
             // 아랫면 (y = -0.5, normal = 0, -1, 0)
-            vPos.x + 0.025f, vPos.y - 0.025f, vPos.z + 0.025f,  vColor.r, vColor.g, vColor.b,  0.0f, -1.0f, 0.0f,
-            vPos.x - 0.025f, vPos.y - 0.025f, vPos.z + 0.025f,  vColor.r, vColor.g, vColor.b,  0.0f, -1.0f, 0.0f,
-            vPos.x - 0.025f, vPos.y - 0.025f, vPos.z - 0.025f,  vColor.r, vColor.g, vColor.b,  0.0f, -1.0f, 0.0f,
-            vPos.x + 0.025f, vPos.y - 0.025f, vPos.z - 0.025f,  vColor.r, vColor.g, vColor.b,  0.0f, -1.0f, 0.0f,
+            0.025f, -0.025f, 0.025f,  vColor.r, vColor.g, vColor.b,  0.0f, -1.0f, 0.0f,
+            -0.025f, -0.025f, 0.025f,  vColor.r, vColor.g, vColor.b,  0.0f, -1.0f, 0.0f,
+            -0.025f, -0.025f, -0.025f,  vColor.r, vColor.g, vColor.b,  0.0f, -1.0f, 0.0f,
+            0.025f, -0.025f, -0.025f,  vColor.r, vColor.g, vColor.b,  0.0f, -1.0f, 0.0f,
         };
         memcpy(vertices, temp, sizeof(temp));
     }
@@ -73,5 +75,14 @@ public:
     GLvoid draw(const GLuint& ShaderID, const glm::mat4& worldMatrix, const glm::mat4& viewProjMatrix) override;
     GLvoid update() override;
     bool Destroy() const { return currentTime >= lifeTime; }
+    
+    BoundingBox get_bb() const {
+        BoundingBox bb;
+        // modelMatrix에서 현재 위치 추출
+        glm::vec3 currentPos = glm::vec3(modelMatrix[3][0], modelMatrix[3][1], modelMatrix[3][2]);
+        // 총알의 작은 크기 (0.05 x 0.05 x 0.05)
+        bb.min = currentPos + glm::vec3(-0.025f, -0.025f, -0.025f);
+        bb.max = currentPos + glm::vec3(0.025f, 0.025f, 0.025f);
+        return bb;
+    }
 };
-
