@@ -175,6 +175,9 @@ GLvoid Player::processMovement(bool w_pressed, bool a_pressed, bool s_pressed, b
 	if (player_body && player_body->getObject()) {
 		auto playerBodyObj = std::dynamic_pointer_cast<Player_body>(player_body->getObject());
 		if (playerBodyObj) {
+			// 이동 전 현재 위치 저장
+			glm::vec3 oldPos = getPosition();
+			
 			// TreeNode의 translate를 직접 사용하여 이동
 			if (w_pressed) {
 				root->translate(playerBodyObj->getForwardMovement());
@@ -187,6 +190,40 @@ GLvoid Player::processMovement(bool w_pressed, bool a_pressed, bool s_pressed, b
 			}
 			if (d_pressed) {
 				root->translate(playerBodyObj->getRightMovement());
+			}
+			
+			// 이동 후 새 위치 확인
+			glm::vec3 newPos = getPosition();
+			
+			// 범위 제한: x, z는 -19 ~ 19
+			const float MIN_BOUNDARY = -19.0f;
+			const float MAX_BOUNDARY = 19.0f;
+			
+			// 범위를 벗어났는지 확인
+			bool outOfBounds = false;
+			glm::vec3 correction(0.0f);
+			
+			if (newPos.x < MIN_BOUNDARY) {
+				correction.x = MIN_BOUNDARY - newPos.x;
+				outOfBounds = true;
+			}
+			else if (newPos.x > MAX_BOUNDARY) {
+				correction.x = MAX_BOUNDARY - newPos.x;
+				outOfBounds = true;
+			}
+			
+			if (newPos.z < MIN_BOUNDARY) {
+				correction.z = MIN_BOUNDARY - newPos.z;
+				outOfBounds = true;
+			}
+			else if (newPos.z > MAX_BOUNDARY) {
+				correction.z = MAX_BOUNDARY - newPos.z;
+				outOfBounds = true;
+			}
+			
+			// 범위를 벗어난 경우 보정
+			if (outOfBounds) {
+				root->translate(correction);
 			}
 		}
 	}
