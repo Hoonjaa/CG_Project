@@ -9,14 +9,17 @@
 #include <math.h>
 #include <cmath>
 
-#include <gl/glew.h>
-#include <gl/freeglut.h>
-#include <gl/freeglut_ext.h>
+#include "include/GL/glew.h"
+#include "include/GL/freeglut.h"
+#include "include/GL/freeglut_ext.h"
 
-#include <gl/glm/glm.hpp>
-#include <gl/glm/ext.hpp>
-#include <gl/glm/gtc/type_ptr.hpp>
-#include <gl/glm/gtc/matrix_transform.hpp>
+#include "include/GL/glm/glm.hpp"
+#include "include/GL/glm/ext.hpp"
+#include "include/GL/glm/gtc/type_ptr.hpp"
+#include "include/GL/glm/gtc/matrix_transform.hpp"
+
+#pragma comment(lib, "lib/glew32.lib")
+#pragma comment(lib, "lib/freeglut.lib")
 
 extern std::random_device rd;
 extern std::uniform_real_distribution<float> random_revolve_speed;
